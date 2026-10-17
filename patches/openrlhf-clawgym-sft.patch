@@ -1,0 +1,383 @@
+diff --git a/openrlhf/cli/train_sft.py b/openrlhf/cli/train_sft.py
+index 8c5352d20a3ef744e12bf0149ff0f5b7aabc719e..e75d1e72da9665b6a78c7b157bff00a520ac6ba8 100644
+--- a/openrlhf/cli/train_sft.py
++++ b/openrlhf/cli/train_sft.py
+@@ -70,6 +70,8 @@ def train(args):
+         True,
+         train_dataset.collate_fn,
+         num_workers=args.data.dataloader_num_workers,
++        lengths=train_dataset.prompt_ids_lens if args.data.length_bucket_size else None,
++        length_bucket_size=args.data.length_bucket_size,
+     )
+ 
+     eval_dataloader = None
+@@ -282,6 +284,13 @@ if __name__ == "__main__":
+     )
+     parser.add_argument("--data.tokenizer_chat_template", type=str, default=None)
+     parser.add_argument("--data.max_len", type=int, default=2048, help="Max tokens for the samples")
++    parser.add_argument(
++        "--data.length_bucket_size",
++        type=int,
++        default=0,
++        help="Sort each shuffled global bucket by approximate sequence length before the DP split; "
++        "set this to train.batch_size to preserve optimizer-step membership",
++    )
+ 
+     # wandb parameters
+     parser.add_argument("--logger.wandb.key", type=str, default=None)
+@@ -305,6 +314,9 @@ if __name__ == "__main__":
+ 
+     args = hierarchize(args)
+ 
++    if args.data.length_bucket_size and args.data.length_bucket_size != args.train.batch_size:
++        parser.error("--data.length_bucket_size must equal --train.batch_size to preserve optimizer-step membership")
++
+     if args.data.multiturn:
+         assert args.data.apply_chat_template, "apply_chat_template must be enabled when using multiturn format"
+ 
+diff --git a/openrlhf/datasets/sft_dataset.py b/openrlhf/datasets/sft_dataset.py
+index 6b5b1e89bb0b9c5d63a37c12a30ec3b7e01b9301..c888f5eedeccf7ed2d6680abff28aaa4e4ef10c8 100644
+--- a/openrlhf/datasets/sft_dataset.py
++++ b/openrlhf/datasets/sft_dataset.py
+@@ -7,7 +7,7 @@ from openrlhf.utils.utils import zero_pad_sequences
+ 
+ 
+ def preprocess_data(
+-    data, input_template=None, input_key="input", output_key=None, apply_chat_template=None
++    data, input_template=None, input_key="input", output_key=None, apply_chat_template=None, tools=None
+ ):
+     if apply_chat_template:
+         if output_key:
+@@ -18,11 +18,17 @@ def preprocess_data(
+                 prompt_message = [{"role": "user", "content": prompt_message}]
+                 response_message = [{"role": "assistant", "content": response_message}]
+ 
+-            prompt = apply_chat_template(prompt_message, tokenize=False, add_generation_prompt=True)
+-            response = apply_chat_template(prompt_message + response_message, tokenize=False)[len(prompt) :]
++            prompt = apply_chat_template(
++                prompt_message, tools=tools, tokenize=False, add_generation_prompt=True
++            )
++            response = apply_chat_template(
++                prompt_message + response_message, tools=tools, tokenize=False
++            )[len(prompt) :]
+         else:
+-            prompt = apply_chat_template(data[input_key][:-1], tokenize=False, add_generation_prompt=True)
+-            response = apply_chat_template(data[input_key], tokenize=False)[len(prompt) :]
++            prompt = apply_chat_template(
++                data[input_key][:-1], tools=tools, tokenize=False, add_generation_prompt=True
++            )
++            response = apply_chat_template(data[input_key], tools=tools, tokenize=False)[len(prompt) :]
+     else:
+         prompt = data[input_key]
+         if input_template:
+@@ -73,12 +79,20 @@ class SFTDataset(Dataset):
+                 self.tokenizer.chat_template = tokenizer_chat_template
+ 
+         # Parallel loading datasets
+-        processed_dataset = dataset.map(
+-            self.process_data,
+-            remove_columns=dataset.column_names,
+-            num_proc=num_processors,
+-        )
++        processed_columns = {"prompt", "response", "prompt_ids_len", "response_ranges"}
++        if processed_columns.issubset(dataset.column_names):
++            # Reuse an audited, tokenizer-specific preprocessing artifact.  This
++            # prevents every distributed rank from rendering the same long
++            # agent trajectories again at startup.
++            processed_dataset = dataset.select_columns(sorted(processed_columns))
++        else:
++            processed_dataset = dataset.map(
++                self.process_data,
++                remove_columns=dataset.column_names,
++                num_proc=num_processors,
++            )
+         processed_dataset = processed_dataset.filter(lambda x: x["prompt"] is not None)
++        self.processed_dataset = processed_dataset
+ 
+         # Store the processed data in class attributes
+         self.prompts = processed_dataset["prompt"]
+@@ -87,6 +101,11 @@ class SFTDataset(Dataset):
+         self.response_ranges = processed_dataset["response_ranges"] if self.multiturn else None
+ 
+     def process_data(self, data):
++        # Agent SFT rows carry the tool contract alongside the conversation.
++        # Passing it to every render is required: otherwise the tokenizer omits
++        # the tool schemas even though the raw row contains them.
++        tools = data.get("tools")
++
+         if self.multiturn and self.output_key:
+             data[self.input_key].append(data[self.output_key])
+             data[self.output_key] = None
+@@ -100,8 +119,12 @@ class SFTDataset(Dataset):
+             response_ranges = []
+             for idx, message in enumerate(data[input_key]):
+                 if message["role"] == "assistant":
+-                    prompt = apply_chat_template(data[input_key][:idx], tokenize=False, add_generation_prompt=True)
+-                    response = apply_chat_template(data[input_key][: idx + 1], tokenize=False)[len(prompt) :]
++                    prompt = apply_chat_template(
++                        data[input_key][:idx], tools=tools, tokenize=False, add_generation_prompt=True
++                    )
++                    response = apply_chat_template(
++                        data[input_key][: idx + 1], tools=tools, tokenize=False
++                    )[len(prompt) :]
+ 
+                     start_idx = (
+                         self.tokenizer(
+@@ -140,6 +163,7 @@ class SFTDataset(Dataset):
+             self.input_key,
+             self.output_key,
+             apply_chat_template=None if self.pretrain_mode else self.apply_chat_template,
++            tools=tools,
+         )
+ 
+         if not self.pretrain_mode:
+diff --git a/openrlhf/trainer/sft_trainer.py b/openrlhf/trainer/sft_trainer.py
+index bcabd7e0b6a167a3c7eb82580d1c00c1cd6b023c..3202dc7818df1c73fc725f7a02ab456b6dbc3ad8 100644
+--- a/openrlhf/trainer/sft_trainer.py
++++ b/openrlhf/trainer/sft_trainer.py
+@@ -1,5 +1,6 @@
+ import os
+ from abc import ABC
++from itertools import islice
+ 
+ import torch
+ from torch.optim import Optimizer
+@@ -7,7 +8,7 @@ from tqdm import tqdm
+ 
+ from openrlhf.models import SFTLoss
+ from openrlhf.utils.distributed_sampler import DistributedSampler
+-from openrlhf.utils.loss_utils import iter_grad_accum_global_norm
++from openrlhf.utils.loss_utils import full_grad_accum_micro_batches, iter_grad_accum_global_norm
+ 
+ 
+ class SFTTrainer(ABC):
+@@ -136,8 +137,30 @@ class SFTTrainer(ABC):
+                     epoch, consumed_samples=0 if epoch > start_epoch else consumed_samples
+                 )
+ 
++            # Keep epoch and DeepSpeed accumulation boundaries identical. The
++            # token-normalization iterator below is recreated every epoch, while
++            # DeepSpeed's micro-step counter is continuous. Dropping only the
++            # shuffled tail prevents a partial normalization window from being
++            # combined with the next epoch by DeepSpeed.
++            available_micro_batches = len(self.train_dataloader)
++            epoch_micro_batches = full_grad_accum_micro_batches(
++                available_micro_batches, self.strategy.accumulated_gradient
++            )
++            dropped_micro_batches = available_micro_batches - epoch_micro_batches
++            if epoch_micro_batches == 0:
++                raise ValueError(
++                    "No complete gradient-accumulation window remains in this epoch: "
++                    f"available_micro_batches={available_micro_batches}, "
++                    f"gradient_accumulation_steps={self.strategy.accumulated_gradient}"
++                )
++            if dropped_micro_batches:
++                self.strategy.print(
++                    "Dropping the shuffled epoch tail to preserve optimizer-step normalization alignment: "
++                    f"{dropped_micro_batches} micro-batches per DP replica"
++                )
++
+             step_bar = tqdm(
+-                range(self.train_dataloader.__len__()),
++                range(epoch_micro_batches),
+                 desc="Train step of epoch %d" % epoch,
+                 disable=not self.strategy.is_rank_0(),
+             )
+@@ -152,8 +175,9 @@ class SFTTrainer(ABC):
+             def sft_loss_mask(batch):
+                 return batch[2].squeeze(1)[:, :-1]
+ 
++            epoch_data = islice(self.train_dataloader, epoch_micro_batches)
+             for (inputs, attention_masks, loss_masks), loss_batch_info in iter_grad_accum_global_norm(
+-                self.train_dataloader, self.strategy, self.strategy.accumulated_gradient, sft_loss_mask
++                epoch_data, self.strategy, self.strategy.accumulated_gradient, sft_loss_mask
+             ):
+                 inputs = inputs.to(device).squeeze(1)
+                 attention_mask = attention_masks.to(device).squeeze(1)
+diff --git a/openrlhf/utils/deepspeed/deepspeed.py b/openrlhf/utils/deepspeed/deepspeed.py
+index 9d8fec7fbd98293df8b30774b600673fee4c8ddc..0802b1fcc758286ac93dc971250c4197c83e6af7 100644
+--- a/openrlhf/utils/deepspeed/deepspeed.py
++++ b/openrlhf/utils/deepspeed/deepspeed.py
+@@ -215,6 +215,8 @@ class DeepspeedStrategy(ABC):
+         sampler=None,
+         consumed_samples=0,
+         num_workers: int = 0,
++        lengths=None,
++        length_bucket_size: int = 0,
+     ):
+         # DDP only mode, replay buffers on each rank are different.
+         if sampler is None and dist.is_initialized():
+@@ -230,6 +232,8 @@ class DeepspeedStrategy(ABC):
+                 seed=self.seed,
+                 drop_last=drop_last,
+                 consumed_samples=consumed_samples,
++                lengths=lengths,
++                length_bucket_size=length_bucket_size,
+             )
+ 
+         return StatefulDataLoader(
+diff --git a/openrlhf/utils/distributed_sampler.py b/openrlhf/utils/distributed_sampler.py
+index df4ddd99e000f4d63db974a260eb7027b69d4713..f3133aaa477efb77d3adde1e5e1864bce7fbcd52 100644
+--- a/openrlhf/utils/distributed_sampler.py
++++ b/openrlhf/utils/distributed_sampler.py
+@@ -1,5 +1,5 @@
+ import math
+-from typing import Iterator, Optional, TypeVar
++from typing import Iterator, Optional, Sequence, TypeVar
+ 
+ import torch
+ import torch.distributed as dist
+@@ -71,6 +71,8 @@ class DistributedSampler(Sampler[_T_co]):
+         seed: int = 0,
+         drop_last: bool = False,
+         consumed_samples=0,
++        lengths: Optional[Sequence[int]] = None,
++        length_bucket_size: int = 0,
+     ) -> None:
+         if num_replicas is None:
+             if not dist.is_available():
+@@ -102,6 +104,14 @@ class DistributedSampler(Sampler[_T_co]):
+         self.shuffle = shuffle
+         self.seed = seed
+         self.consumed_indicies = consumed_samples // self.num_replicas
++        if lengths is not None and len(lengths) != len(dataset):
++            raise ValueError(f"lengths has {len(lengths)} entries for a dataset of size {len(dataset)}")
++        if length_bucket_size < 0:
++            raise ValueError("length_bucket_size must be non-negative")
++        if length_bucket_size and length_bucket_size % self.num_replicas:
++            raise ValueError("length_bucket_size must be divisible by num_replicas")
++        self.lengths = lengths
++        self.length_bucket_size = length_bucket_size
+ 
+     def __iter__(self) -> Iterator[_T_co]:
+         if self.shuffle:
+@@ -124,6 +134,18 @@ class DistributedSampler(Sampler[_T_co]):
+             indices = indices[: self.total_size]
+         assert len(indices) == self.total_size
+ 
++        # Preserve the randomly selected members of every global bucket, but
++        # order them by length before the rank-strided split. At a given loader
++        # step, DP ranks therefore receive neighboring lengths and spend less
++        # time waiting for the longest rank. When bucket size equals the global
++        # train batch size, optimizer-step membership is unchanged.
++        if self.length_bucket_size:
++            if self.lengths is None:
++                raise ValueError("lengths are required when length_bucket_size is enabled")
++            for start in range(0, len(indices), self.length_bucket_size):
++                end = min(start + self.length_bucket_size, len(indices))
++                indices[start:end] = sorted(indices[start:end], key=self.lengths.__getitem__)
++
+         # subsample
+         indices = indices[self.rank : self.total_size : self.num_replicas]
+         # skip consumed_samples
+diff --git a/openrlhf/utils/loss_utils.py b/openrlhf/utils/loss_utils.py
+index f4f67fd477b590bd0fb52b3042b36ee01c192db0..5f3abdc17781a6569c252a07e042ef9421a7ca89 100644
+--- a/openrlhf/utils/loss_utils.py
++++ b/openrlhf/utils/loss_utils.py
+@@ -4,6 +4,20 @@ import torch
+ import torch.distributed as dist
+ 
+ 
++def full_grad_accum_micro_batches(num_micro_batches: int, accumulated_gradient: int) -> int:
++    """Return the largest prefix that ends on an optimizer-step boundary.
++
++    DeepSpeed keeps its gradient-accumulation counter across dataloader/epoch
++    boundaries. Consumers that compute normalization statistics one epoch at
++    a time must therefore avoid yielding a partial accumulation window at the
++    end of an epoch, or the normalization and optimizer-step windows diverge.
++    """
++    if num_micro_batches < 0:
++        raise ValueError(f"num_micro_batches must be non-negative, got {num_micro_batches}")
++    gas = max(int(accumulated_gradient), 1)
++    return num_micro_batches // gas * gas
++
++
+ def _get_dp_group(strategy):
+     if not dist.is_available() or not dist.is_initialized():
+         return None
+diff --git a/tests/test_distributed_sampler.py b/tests/test_distributed_sampler.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..0e9f7a67aa0145cd32d0a7e8d70c267106012991
+--- /dev/null
++++ b/tests/test_distributed_sampler.py
+@@ -0,0 +1,51 @@
++import pytest
++import torch
++
++from openrlhf.utils.distributed_sampler import DistributedSampler
++
++
++def _rank_indices(dataset, lengths, rank, epoch=0):
++    sampler = DistributedSampler(
++        dataset,
++        num_replicas=2,
++        rank=rank,
++        shuffle=True,
++        seed=17,
++        drop_last=True,
++        lengths=lengths,
++        length_bucket_size=8,
++    )
++    sampler.set_epoch(epoch)
++    return list(sampler)
++
++
++def test_length_bucketing_preserves_membership_and_pairs_neighbor_lengths():
++    dataset = list(range(16))
++    lengths = [91, 3, 72, 18, 55, 44, 8, 63, 29, 80, 12, 37, 99, 24, 67, 48]
++    rank0 = _rank_indices(dataset, lengths, 0)
++    rank1 = _rank_indices(dataset, lengths, 1)
++
++    generator = torch.Generator().manual_seed(17)
++    shuffled = torch.randperm(len(dataset), generator=generator).tolist()
++    reconstructed = [item for pair in zip(rank0, rank1) for item in pair]
++
++    for start in range(0, len(dataset), 8):
++        expected = shuffled[start : start + 8]
++        actual = reconstructed[start : start + 8]
++        assert set(actual) == set(expected)
++        assert actual == sorted(actual, key=lengths.__getitem__)
++
++
++def test_length_bucketing_is_deterministic_per_epoch():
++    dataset = list(range(16))
++    lengths = list(reversed(range(16)))
++    assert _rank_indices(dataset, lengths, 0, epoch=2) == _rank_indices(dataset, lengths, 0, epoch=2)
++    assert _rank_indices(dataset, lengths, 0, epoch=2) != _rank_indices(dataset, lengths, 0, epoch=3)
++
++
++def test_length_bucketing_rejects_invalid_configuration():
++    dataset = list(range(8))
++    with pytest.raises(ValueError, match="dataset of size"):
++        DistributedSampler(dataset, num_replicas=2, rank=0, lengths=[1] * 7, length_bucket_size=8)
++    with pytest.raises(ValueError, match="divisible"):
++        DistributedSampler(dataset, num_replicas=3, rank=0, lengths=[1] * 8, length_bucket_size=8)
+diff --git a/tests/test_loss_aggregation.py b/tests/test_loss_aggregation.py
+index dad922800e9097d699d242e3f29e3e914aec82f4..e03b0aa3393b511c6374ee8501cb911c00d4f249 100644
+--- a/tests/test_loss_aggregation.py
++++ b/tests/test_loss_aggregation.py
+@@ -42,6 +42,7 @@ PolicyLoss = _loss_module.PolicyLoss
+ aggregate_loss = _loss_module.aggregate_loss
+ get_loss_batch_info = _loss_utils_module.get_loss_batch_info
+ iter_grad_accum_global_norm = _loss_utils_module.iter_grad_accum_global_norm
++full_grad_accum_micro_batches = _loss_utils_module.full_grad_accum_micro_batches
+ 
+ 
+ def test_token_mean_aggregation_matches_verl_dp_average():
+@@ -193,6 +194,16 @@ def test_grad_accum_global_norm_differs_from_per_microbatch_when_uneven():
+     assert not torch.allclose(per_mb, global_mean)
+ 
+ 
++def test_full_grad_accum_micro_batches_drops_only_incomplete_epoch_tail():
++    # Formal ClawGym 8B SFT: 22,628 rows / DP2 = 11,314 micro-batches per
++    # replica. GAS64 consumes 11,264 and drops the shuffled tail of 50 per
++    # replica (100 logical samples globally) each epoch.
++    assert full_grad_accum_micro_batches(11_314, 64) == 11_264
++    assert full_grad_accum_micro_batches(11_264, 64) == 11_264
++    assert full_grad_accum_micro_batches(63, 64) == 0
++    assert full_grad_accum_micro_batches(7, 1) == 7
++
++
+ def test_policy_kl_metric_is_not_clamped():
+     log_probs = torch.tensor([[100.0]])
+     old_log_probs = torch.zeros_like(log_probs)

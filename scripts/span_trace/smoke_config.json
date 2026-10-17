@@ -1,0 +1,1 @@
+{"plugins":{"enabled":true,"load":{"paths":["/root/.openclaw/skills/span-trace"]},"entries":{"span-trace":{"enabled":true}}}}

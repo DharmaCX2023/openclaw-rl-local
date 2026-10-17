@@ -1,0 +1,1 @@
+{"id":"span-trace","name":"Span filesystem provenance","description":"Audit-only per-toolcall process/file tracing","configSchema":{"type":"object","properties":{},"additionalProperties":false}}

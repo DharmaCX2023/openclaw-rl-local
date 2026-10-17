@@ -1,0 +1,298 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "read",
+      "description": "Read the contents of a file. Supports text files and images (jpg, png, gif, webp). Images are sent as attachments. For text files, output is truncated to 2000 lines or 50KB (whichever is hit first). Use offset/limit for large files. When you need the full file, continue with offset until complete.",
+      "parameters": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "path": {
+            "description": "Path to the file to read (relative or absolute)",
+            "type": "string"
+          },
+          "offset": {
+            "description": "Line number to start reading from (1-indexed)",
+            "type": "number"
+          },
+          "limit": {
+            "description": "Maximum number of lines to read",
+            "type": "number"
+          },
+          "file_path": {
+            "description": "Path to the file to read (relative or absolute)",
+            "type": "string"
+          },
+          "filePath": {
+            "description": "Path to the file to read (relative or absolute)",
+            "type": "string"
+          },
+          "file": {
+            "description": "Path to the file to read (relative or absolute)",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "edit",
+      "description": "Edit a single file using exact text replacement. Every edits[].oldText must match a unique, non-overlapping region of the original file. If two changes affect the same block or nearby lines, merge them into one edit instead of emitting overlapping edits. Do not include large unchanged regions just to connect distant changes.",
+      "parameters": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "edits"
+        ],
+        "properties": {
+          "path": {
+            "description": "Path to the file to edit (relative or absolute)",
+            "type": "string"
+          },
+          "edits": {
+            "description": "One or more targeted replacements. Each edit is matched against the original file, not incrementally. Do not include overlapping or nested edits. If two changes touch the same block or nearby lines, merge them into one edit instead.",
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "oldText",
+                "newText"
+              ],
+              "properties": {
+                "oldText": {
+                  "description": "Exact text for one targeted replacement. It must be unique in the original file and must not overlap with any other edits[].oldText in the same call.",
+                  "type": "string"
+                },
+                "newText": {
+                  "description": "Replacement text for this targeted edit.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "file_path": {
+            "description": "Path to the file to edit (relative or absolute)",
+            "type": "string"
+          },
+          "filePath": {
+            "description": "Path to the file to edit (relative or absolute)",
+            "type": "string"
+          },
+          "file": {
+            "description": "Path to the file to edit (relative or absolute)",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "write",
+      "description": "Write content to a file. Creates the file if it doesn't exist, overwrites if it does. Automatically creates parent directories.",
+      "parameters": {
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "path": {
+            "description": "Path to the file to write (relative or absolute)",
+            "type": "string"
+          },
+          "content": {
+            "description": "Content to write to the file",
+            "type": "string"
+          },
+          "file_path": {
+            "description": "Path to the file to write (relative or absolute)",
+            "type": "string"
+          },
+          "filePath": {
+            "description": "Path to the file to write (relative or absolute)",
+            "type": "string"
+          },
+          "file": {
+            "description": "Path to the file to write (relative or absolute)",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "exec",
+      "description": "Execute shell commands with background continuation. Use yieldMs/background to continue later via process tool. Use pty=true for TTY-required commands (terminal UIs, coding agents).",
+      "parameters": {
+        "type": "object",
+        "required": [
+          "command"
+        ],
+        "properties": {
+          "command": {
+            "description": "Shell command to execute",
+            "type": "string"
+          },
+          "workdir": {
+            "description": "Working directory (defaults to cwd)",
+            "type": "string"
+          },
+          "env": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "yieldMs": {
+            "description": "Milliseconds to wait before backgrounding (default 10000)",
+            "type": "number"
+          },
+          "background": {
+            "description": "Run in background immediately",
+            "type": "boolean"
+          },
+          "timeout": {
+            "description": "Timeout in seconds (optional, kills process on expiry)",
+            "type": "number"
+          },
+          "pty": {
+            "description": "Run in a pseudo-terminal (PTY) when available (TTY-required CLIs, coding agents)",
+            "type": "boolean"
+          },
+          "elevated": {
+            "description": "Run on the host with elevated permissions (if allowed)",
+            "type": "boolean"
+          },
+          "host": {
+            "description": "Exec host/target (auto|sandbox|gateway|node).",
+            "type": "string"
+          },
+          "security": {
+            "description": "Exec security mode (deny|allowlist|full).",
+            "type": "string"
+          },
+          "ask": {
+            "description": "Exec ask mode (off|on-miss|always).",
+            "type": "string"
+          },
+          "node": {
+            "description": "Node id/name for host=node.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "process",
+      "description": "Manage running exec sessions: list, poll, log, write, send-keys, submit, paste, kill.",
+      "parameters": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "description": "Process action",
+            "type": "string"
+          },
+          "sessionId": {
+            "description": "Session id for actions other than list",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data to write for write",
+            "type": "string"
+          },
+          "keys": {
+            "description": "Key tokens to send for send-keys",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hex": {
+            "description": "Hex bytes to send for send-keys",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "literal": {
+            "description": "Literal string for send-keys",
+            "type": "string"
+          },
+          "text": {
+            "description": "Text to paste for paste",
+            "type": "string"
+          },
+          "bracketed": {
+            "description": "Wrap paste in bracketed mode",
+            "type": "boolean"
+          },
+          "eof": {
+            "description": "Close stdin after write",
+            "type": "boolean"
+          },
+          "offset": {
+            "description": "Log offset",
+            "type": "number"
+          },
+          "limit": {
+            "description": "Log length",
+            "type": "number"
+          },
+          "timeout": {
+            "description": "For poll: wait up to this many milliseconds before returning",
+            "minimum": 0,
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "web_fetch",
+      "description": "Fetch and extract readable content from a URL (HTML → markdown/text). Use for lightweight page access without browser automation.",
+      "parameters": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "description": "HTTP or HTTPS URL to fetch.",
+            "type": "string"
+          },
+          "extractMode": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "text"
+            ],
+            "description": "Extraction mode (\"markdown\" or \"text\").",
+            "default": "markdown"
+          },
+          "maxChars": {
+            "description": "Maximum characters to return (truncates when exceeded).",
+            "minimum": 100,
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,130 @@
+[
+  {
+    "arm": "grpo",
+    "version": "v1",
+    "source": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v1-20260904/checkpoints/eval_artifacts/train_step_000000",
+    "repository": {
+      "commit": "11d0030695e6713190b4faacf110e0f5fc2e8a99",
+      "dirty": false,
+      "root": "/root/openclaw-rl-local",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "model_path": "/root/openclaw-rl-local/outputs/clawgym-8b-sft-formal-20260902-165551/final_model",
+    "configuration": {
+      "context_window": 65536,
+      "deterministic_tool_call_ids": "1",
+      "eval_n_samples": 1,
+      "eval_num_workers": 16,
+      "eval_sampling_identity_scheme": "eval:v1:<dataset>:<task_id>:sample:<sample_index>",
+      "max_agent_steps": 96,
+      "max_compaction_events": 8,
+      "max_response_tokens": 8192,
+      "max_trajectory_tokens": 65536,
+      "megatron_deterministic_mode": "1",
+      "sampling_seed_base": "20260904",
+      "sglang_deterministic_inference": "1"
+    },
+    "shared_seed_checks": 1939,
+    "seed_mismatches": 0,
+    "file_hashes": {
+      "manifest.json": "d37a92c394d240f854978968ee46d816f042d3ddcc8a08a828c67a26633286b8",
+      "results.jsonl": "1c02ad74e187dbdf889e8b5900e9e52f191d367ac6bb95977dc48bf00b71e1e1"
+    }
+  },
+  {
+    "arm": "opsd",
+    "version": "v1",
+    "source": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v1-20260904/checkpoints/eval_artifacts/train_step_000000",
+    "repository": {
+      "commit": "11d0030695e6713190b4faacf110e0f5fc2e8a99",
+      "dirty": false,
+      "root": "/root/openclaw-rl-local",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "model_path": "/root/openclaw-rl-local/outputs/clawgym-8b-sft-formal-20260902-165551/final_model",
+    "configuration": {
+      "context_window": 65536,
+      "deterministic_tool_call_ids": "1",
+      "eval_n_samples": 1,
+      "eval_num_workers": 16,
+      "eval_sampling_identity_scheme": "eval:v1:<dataset>:<task_id>:sample:<sample_index>",
+      "max_agent_steps": 96,
+      "max_compaction_events": 8,
+      "max_response_tokens": 8192,
+      "max_trajectory_tokens": 65536,
+      "megatron_deterministic_mode": "1",
+      "sampling_seed_base": "20260904",
+      "sglang_deterministic_inference": "1"
+    },
+    "shared_seed_checks": 1966,
+    "seed_mismatches": 0,
+    "file_hashes": {
+      "manifest.json": "87522b6118fb1ba90a6a4d9370f459ea67919385b5af6bf6929b3a75a4266c79",
+      "results.jsonl": "edec207c7c91206f8c8d54aab7835a0cf6463ba2c99bb57d2d1033f7032b20a4"
+    }
+  },
+  {
+    "arm": "grpo",
+    "version": "v2",
+    "source": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v2-20260904/checkpoints/eval_artifacts/train_step_000000",
+    "repository": {
+      "commit": "27be5172667ece69301aaca14f6be85b4742aa06",
+      "dirty": false,
+      "root": "/root/openclaw-rl-local",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "model_path": "/root/openclaw-rl-local/outputs/clawgym-8b-sft-formal-20260902-165551/final_model",
+    "configuration": {
+      "context_window": 65536,
+      "deterministic_tool_call_ids": "1",
+      "eval_n_samples": 1,
+      "eval_num_workers": 16,
+      "eval_sampling_identity_scheme": "eval:v1:<dataset>:<task_id>:sample:<sample_index>",
+      "max_agent_steps": 96,
+      "max_compaction_events": 8,
+      "max_response_tokens": 8192,
+      "max_trajectory_tokens": 65536,
+      "megatron_deterministic_mode": "1",
+      "sampling_seed_base": "20260904",
+      "sglang_deterministic_inference": "1"
+    },
+    "shared_seed_checks": 1924,
+    "seed_mismatches": 0,
+    "file_hashes": {
+      "manifest.json": "76984b378c45fd8499f14f84a876439b40fe9c66762f6aa62b7b0737be535b03",
+      "results.jsonl": "28a4c40619ba9b6c988f3794064f60911bd2a0def367531e80eb4aed25ee0314"
+    }
+  },
+  {
+    "arm": "opsd",
+    "version": "v2",
+    "source": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v2-20260904/checkpoints/eval_artifacts/train_step_000000",
+    "repository": {
+      "commit": "27be5172667ece69301aaca14f6be85b4742aa06",
+      "dirty": false,
+      "root": "/root/openclaw-rl-local",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "model_path": "/root/openclaw-rl-local/outputs/clawgym-8b-sft-formal-20260902-165551/final_model",
+    "configuration": {
+      "context_window": 65536,
+      "deterministic_tool_call_ids": "1",
+      "eval_n_samples": 1,
+      "eval_num_workers": 16,
+      "eval_sampling_identity_scheme": "eval:v1:<dataset>:<task_id>:sample:<sample_index>",
+      "max_agent_steps": 96,
+      "max_compaction_events": 8,
+      "max_response_tokens": 8192,
+      "max_trajectory_tokens": 65536,
+      "megatron_deterministic_mode": "1",
+      "sampling_seed_base": "20260904",
+      "sglang_deterministic_inference": "1"
+    },
+    "shared_seed_checks": 1822,
+    "seed_mismatches": 0,
+    "file_hashes": {
+      "manifest.json": "d14cc5ff2804d6e980162f2d86c0d2a1d70a2d38362551c6cfc69dd970a354fd",
+      "results.jsonl": "22b4ce9829fa2a6ae735f562e3e30df65df85de2b1e85925faf509f87d252271"
+    }
+  }
+]

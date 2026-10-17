@@ -1,0 +1,9 @@
+{
+  "rows": 12792,
+  "paired_records": 6392,
+  "task_mismatches": 0,
+  "rows_by_arm": {
+    "grpo": 6395,
+    "opsd": 6397
+  }
+}

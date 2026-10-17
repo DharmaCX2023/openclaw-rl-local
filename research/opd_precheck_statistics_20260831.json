@@ -1,0 +1,978 @@
+{
+  "h1_verifier_factorization": {
+    "eval_by_checkpoint": {
+      "0": {
+        "checker_ok": 199,
+        "factor_count_mean": 11.884422110552764,
+        "factor_count_median": 11,
+        "factorized": 199,
+        "mixed_outcome": 181,
+        "mixed_outcome_rate": 0.905,
+        "partial_scalar_reward": 182,
+        "partial_scalar_reward_rate": 0.91,
+        "result_rows": 200,
+        "reward_mean": 0.5582101787356161,
+        "stable": 199
+      },
+      "100": {
+        "checker_ok": 200,
+        "factor_count_mean": 11.885,
+        "factor_count_median": 11,
+        "factorized": 200,
+        "mixed_outcome": 190,
+        "mixed_outcome_rate": 0.95,
+        "partial_scalar_reward": 190,
+        "partial_scalar_reward_rate": 0.95,
+        "result_rows": 200,
+        "reward_mean": 0.5559749688879757,
+        "stable": 200
+      },
+      "20": {
+        "checker_ok": 198,
+        "factor_count_mean": 11.883838383838384,
+        "factor_count_median": 11,
+        "factorized": 198,
+        "mixed_outcome": 177,
+        "mixed_outcome_rate": 0.8894472361809045,
+        "partial_scalar_reward": 178,
+        "partial_scalar_reward_rate": 0.89,
+        "result_rows": 200,
+        "reward_mean": 0.5329857290721723,
+        "stable": 198
+      },
+      "40": {
+        "checker_ok": 199,
+        "factor_count_mean": 11.914572864321608,
+        "factor_count_median": 11,
+        "factorized": 199,
+        "mixed_outcome": 174,
+        "mixed_outcome_rate": 0.8743718592964824,
+        "partial_scalar_reward": 175,
+        "partial_scalar_reward_rate": 0.875,
+        "result_rows": 200,
+        "reward_mean": 0.5154213168954052,
+        "stable": 199
+      },
+      "60": {
+        "checker_ok": 197,
+        "factor_count_mean": 11.842639593908629,
+        "factor_count_median": 11,
+        "factorized": 197,
+        "mixed_outcome": 185,
+        "mixed_outcome_rate": 0.9390862944162437,
+        "partial_scalar_reward": 185,
+        "partial_scalar_reward_rate": 0.925,
+        "result_rows": 200,
+        "reward_mean": 0.5362016080476886,
+        "stable": 197
+      },
+      "80": {
+        "checker_ok": 198,
+        "factor_count_mean": 11.904040404040405,
+        "factor_count_median": 11,
+        "factorized": 198,
+        "mixed_outcome": 175,
+        "mixed_outcome_rate": 0.8838383838383839,
+        "partial_scalar_reward": 171,
+        "partial_scalar_reward_rate": 0.855,
+        "result_rows": 200,
+        "reward_mean": 0.5374821473499622,
+        "stable": 198
+      }
+    },
+    "interpretation": "Factorization and deterministic replay are directly measured. Mixed final outcome is not action-level mixed credit.",
+    "train_random_500": {
+      "checker_ok": 500,
+      "checker_ok_rate": 1.0,
+      "errors": {},
+      "factor_count_histogram": {
+        "10": 29,
+        "11": 32,
+        "12": 31,
+        "13": 35,
+        "14": 27,
+        "15": 31,
+        "16": 29,
+        "17": 28,
+        "18": 15,
+        "19": 19,
+        "20": 17,
+        "21": 21,
+        "22": 19,
+        "23": 18,
+        "24": 6,
+        "25": 11,
+        "26": 8,
+        "27": 11,
+        "28": 5,
+        "29": 8,
+        "30": 5,
+        "31": 9,
+        "32": 2,
+        "34": 2,
+        "35": 4,
+        "38": 1,
+        "39": 2,
+        "4": 1,
+        "40": 3,
+        "41": 2,
+        "42": 1,
+        "43": 1,
+        "46": 1,
+        "48": 1,
+        "49": 1,
+        "5": 5,
+        "52": 1,
+        "54": 1,
+        "59": 1,
+        "6": 5,
+        "64": 1,
+        "7": 13,
+        "8": 20,
+        "9": 17
+      },
+      "factor_count_mean": 17.462,
+      "factor_count_median": 16,
+      "factorized": 500,
+      "factorized_rate": 1.0,
+      "mixed_outcome": 15,
+      "mixed_outcome_rate": 0.03,
+      "n": 500,
+      "stable": 500,
+      "stable_rate": 1.0
+    }
+  },
+  "h2_mixed_credit_proxy": {
+    "binomial_wilson_95": [
+      0.12274926900019348,
+      0.21272647734006392
+    ],
+    "by_artifact_root": {
+      "config": {
+        "failure_relevant_exact_writes": 2,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 2,
+        "wilson_95": [
+          0.0,
+          0.6576197724933469
+        ]
+      },
+      "docs": {
+        "failure_relevant_exact_writes": 2,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 2,
+        "wilson_95": [
+          0.0,
+          0.6576197724933469
+        ]
+      },
+      "input": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "notes": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "out": {
+        "failure_relevant_exact_writes": 18,
+        "mixed": 1,
+        "rate": 0.05555555555555555,
+        "task_pair_clusters": 14,
+        "wilson_95": [
+          0.009875190978303097,
+          0.25757300781872594
+        ]
+      },
+      "output": {
+        "failure_relevant_exact_writes": 187,
+        "mixed": 32,
+        "rate": 0.1711229946524064,
+        "task_pair_clusters": 136,
+        "wilson_95": [
+          0.12390128424119493,
+          0.2315846737886839
+        ]
+      },
+      "outputs": {
+        "failure_relevant_exact_writes": 29,
+        "mixed": 6,
+        "rate": 0.20689655172413793,
+        "task_pair_clusters": 24,
+        "wilson_95": [
+          0.09846070197841039,
+          0.38390090403867905
+        ]
+      },
+      "plan_next_call.py": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "prototype": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "reports": {
+        "failure_relevant_exact_writes": 3,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 3,
+        "wilson_95": [
+          5.551115123125783e-17,
+          0.5614970317550454
+        ]
+      },
+      "research": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "schedule": {
+        "failure_relevant_exact_writes": 2,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 2,
+        "wilson_95": [
+          0.0,
+          0.6576197724933469
+        ]
+      },
+      "scheduler": {
+        "failure_relevant_exact_writes": 1,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.7934506856227626
+        ]
+      },
+      "scripts": {
+        "failure_relevant_exact_writes": 5,
+        "mixed": 2,
+        "rate": 0.4,
+        "task_pair_clusters": 5,
+        "wilson_95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "web": {
+        "failure_relevant_exact_writes": 2,
+        "mixed": 0,
+        "rate": 0.0,
+        "task_pair_clusters": 1,
+        "wilson_95": [
+          0.0,
+          0.6576197724933469
+        ]
+      },
+      "workspace": {
+        "failure_relevant_exact_writes": 2,
+        "mixed": 1,
+        "rate": 0.5,
+        "task_pair_clusters": 2,
+        "wilson_95": [
+          0.09453120573423074,
+          0.9054687942657693
+        ]
+      }
+    },
+    "by_factor_count": {
+      "13-16": {
+        "failure_relevant_exact_writes": 72,
+        "mixed": 12,
+        "rate": 0.16666666666666666,
+        "task_pair_clusters": 56,
+        "wilson_95": [
+          0.09799371242561683,
+          0.269107069305355
+        ]
+      },
+      "9-12": {
+        "failure_relevant_exact_writes": 92,
+        "mixed": 11,
+        "rate": 0.11956521739130435,
+        "task_pair_clusters": 63,
+        "wilson_95": [
+          0.06809134808816239,
+          0.20153579593350626
+        ]
+      },
+      "<=8": {
+        "failure_relevant_exact_writes": 38,
+        "mixed": 2,
+        "rate": 0.05263157894736842,
+        "task_pair_clusters": 31,
+        "wilson_95": [
+          0.014554208147292413,
+          0.17285462131770377
+        ]
+      },
+      ">=17": {
+        "failure_relevant_exact_writes": 56,
+        "mixed": 17,
+        "rate": 0.30357142857142855,
+        "task_pair_clusters": 43,
+        "wilson_95": [
+          0.19900325085369447,
+          0.43335865285724834
+        ]
+      }
+    },
+    "by_right_trajectory_steps": {
+      "11-20": {
+        "failure_relevant_exact_writes": 31,
+        "mixed": 4,
+        "rate": 0.12903225806451613,
+        "task_pair_clusters": 24,
+        "wilson_95": [
+          0.051342843746291486,
+          0.28852406256306423
+        ]
+      },
+      "21-40": {
+        "failure_relevant_exact_writes": 9,
+        "mixed": 3,
+        "rate": 0.3333333333333333,
+        "task_pair_clusters": 9,
+        "wilson_95": [
+          0.1205838183869109,
+          0.6457978644196036
+        ]
+      },
+      "<=10": {
+        "failure_relevant_exact_writes": 208,
+        "mixed": 34,
+        "rate": 0.16346153846153846,
+        "task_pair_clusters": 152,
+        "wilson_95": [
+          0.11939577618164157,
+          0.21973264193174505
+        ]
+      },
+      ">40": {
+        "failure_relevant_exact_writes": 10,
+        "mixed": 1,
+        "rate": 0.1,
+        "task_pair_clusters": 8,
+        "wilson_95": [
+          0.017876213095072896,
+          0.4041500267952385
+        ]
+      }
+    },
+    "by_transition": {
+      "0->20": {
+        "failure_relevant_exact_writes": 56,
+        "mixed": 7,
+        "rate": 0.125,
+        "task_pair_clusters": 41,
+        "wilson_95": [
+          0.06189068695717122,
+          0.2362547655819014
+        ]
+      },
+      "20->40": {
+        "failure_relevant_exact_writes": 53,
+        "mixed": 7,
+        "rate": 0.1320754716981132,
+        "task_pair_clusters": 38,
+        "wilson_95": [
+          0.06547853284463252,
+          0.24840255308904924
+        ]
+      },
+      "40->60": {
+        "failure_relevant_exact_writes": 68,
+        "mixed": 15,
+        "rate": 0.22058823529411764,
+        "task_pair_clusters": 51,
+        "wilson_95": [
+          0.13849012387325205,
+          0.33256738771149325
+        ]
+      },
+      "60->80": {
+        "failure_relevant_exact_writes": 7,
+        "mixed": 3,
+        "rate": 0.42857142857142855,
+        "task_pair_clusters": 6,
+        "wilson_95": [
+          0.15821985525146975,
+          0.7495416354723428
+        ]
+      },
+      "80->100": {
+        "failure_relevant_exact_writes": 74,
+        "mixed": 10,
+        "rate": 0.13513513513513514,
+        "task_pair_clusters": 57,
+        "wilson_95": [
+          0.07509048592618377,
+          0.23119178552523312
+        ]
+      }
+    },
+    "factor_count_ge17_association": {
+      "bootstrap_probability_difference_le_zero": 0.0042,
+      "cluster_bootstrap_95": [
+        0.042120957972230005,
+        0.3282738095238095
+      ],
+      "difference_high_minus_low": 0.1798090523338048,
+      "task_pair_clusters": 193
+    },
+    "failure_relevant_exact_single_writes": 258,
+    "mixed_credit_exact_single_writes": 42,
+    "rho_mixed": 0.16279069767441862,
+    "selection": "All adjacent-checkpoint task pairs whose earlier workspace has at least one failed factor; no filtering on later correction/regression outcomes.",
+    "task_pair_cluster_bootstrap_95": [
+      0.11538461538461539,
+      0.21299638989169675
+    ],
+    "unit": "A logged, byte-exact, single full-file write replayed on the earlier workspace; not an original on-policy turn in that earlier trajectory."
+  },
+  "h3_collateral_damage": {
+    "artifact_swap_summary": {
+      "artifact_interventions": 13555,
+      "artifact_interventions_ok": 13555,
+      "baseline_checks_ok": 932,
+      "baseline_checks_stable": 932,
+      "candidate_task_pairs": 932,
+      "candidate_task_pairs_by_transition": {
+        "0->20": 183,
+        "20->40": 186,
+        "40->60": 187,
+        "60->80": 190,
+        "80->100": 186
+      },
+      "effective_artifact_interventions": 1201,
+      "interpretation": "A positive result proves a single final artifact replacement causally changes both passed and failed verifier factors. It does not yet prove that one model turn or token span has the same mixed effect.",
+      "repeat_stable_mixed_interventions": 84,
+      "strict_mixed_artifact_interventions": 84,
+      "task_pair_mixed_rate": 0.07939914163090128,
+      "task_pairs_with_mixed_by_transition": {
+        "0->20": 13,
+        "20->40": 12,
+        "40->60": 21,
+        "60->80": 16,
+        "80->100": 12
+      },
+      "task_pairs_with_repeat_stable_mixed_artifact": 74
+    },
+    "interpretation": "Workspace interventions prove collateral damage is possible and nontrivial. Checkpoint transitions are observational. Neither measures regression caused by a HINT-SD/OPD gradient update, so H3 remains open.",
+    "observational_checkpoint_transitions": {
+      "0->100": {
+        "correction_eligible": 1042,
+        "correction_rate": 0.1765834932821497,
+        "corrections_0_to_1": 184,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1314,
+        "regression_rate": 0.1385083713850837,
+        "regressions_1_to_0": 182,
+        "task_overlap": 200,
+        "unchanged_equal": 1991
+      },
+      "0->20": {
+        "correction_eligible": 1030,
+        "correction_rate": 0.14854368932038836,
+        "corrections_0_to_1": 153,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1302,
+        "regression_rate": 0.15130568356374807,
+        "regressions_1_to_0": 197,
+        "task_overlap": 199,
+        "unchanged_equal": 1984
+      },
+      "20->40": {
+        "correction_eligible": 1083,
+        "correction_rate": 0.1772853185595568,
+        "corrections_0_to_1": 192,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1258,
+        "regression_rate": 0.1836248012718601,
+        "regressions_1_to_0": 231,
+        "task_overlap": 198,
+        "unchanged_equal": 1918
+      },
+      "40->60": {
+        "correction_eligible": 1113,
+        "correction_rate": 0.20035938903863432,
+        "corrections_0_to_1": 223,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1205,
+        "regression_rate": 0.13858921161825727,
+        "regressions_1_to_0": 167,
+        "task_overlap": 196,
+        "unchanged_equal": 1929
+      },
+      "60->80": {
+        "correction_eligible": 1051,
+        "correction_rate": 0.192197906755471,
+        "corrections_0_to_1": 202,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1253,
+        "regression_rate": 0.1484437350359138,
+        "regressions_1_to_0": 186,
+        "task_overlap": 195,
+        "unchanged_equal": 1917
+      },
+      "80->100": {
+        "correction_eligible": 1058,
+        "correction_rate": 0.19187145557655955,
+        "corrections_0_to_1": 203,
+        "interpretation": "observational checkpoint transition; not a targeted-update causal rate",
+        "regression_eligible": 1293,
+        "regression_rate": 0.14617169373549885,
+        "regressions_1_to_0": 189,
+        "task_overlap": 198,
+        "unchanged_equal": 1958
+      }
+    },
+    "targeted_opd_gradient_update_tested": false
+  },
+  "qualitative_exact_write_examples": [
+    {
+      "artifact": "output/catalog_by_category.md",
+      "corrections": [
+        "catalog_bullets_sorted_by_title_ci"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_99/instance-eval-83.log",
+      "regressions": [
+        "catalog_bullets_match_expected_records",
+        "catalog_headers_counts_match",
+        "catalog_total_bullets_count_match",
+        "numbers_consistent_across_files"
+      ],
+      "task_id": "task_0083",
+      "transition": "80->100",
+      "write_log_line": 217
+    },
+    {
+      "artifact": "outputs/report.md",
+      "corrections": [
+        "abstract_length_and_originality",
+        "results_highest_mean_color_temp_correct",
+        "results_shortest_mean_shot_length_correct"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-48.log",
+      "regressions": [
+        "interpretation_length"
+      ],
+      "task_id": "task_0048",
+      "transition": "0->20",
+      "write_log_line": 247
+    },
+    {
+      "artifact": "output/catalog_by_category.md",
+      "corrections": [
+        "catalog_headers_in_alphabetical_order",
+        "catalog_total_bullets_count_match"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-83.log",
+      "regressions": [
+        "catalog_bullets_sorted_by_title_ci",
+        "numbers_consistent_across_files"
+      ],
+      "task_id": "task_0083",
+      "transition": "20->40",
+      "write_log_line": 188
+    },
+    {
+      "artifact": "output/usecases_summary.json",
+      "corrections": [
+        "summary_categories_set_and_counts_valid",
+        "summary_counts_match_computed",
+        "summary_expected_constants_match"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-83.log",
+      "regressions": [
+        "numbers_consistent_across_files"
+      ],
+      "task_id": "task_0083",
+      "transition": "20->40",
+      "write_log_line": 169
+    },
+    {
+      "artifact": "output/Health_Status_Report.md",
+      "corrections": [
+        "report_data_quality_notes_missing_sleep_listed"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-22.log",
+      "regressions": [
+        "report_data_coverage_correct",
+        "report_key_findings_bullets"
+      ],
+      "task_id": "task_0022",
+      "transition": "20->40",
+      "write_log_line": 363
+    },
+    {
+      "artifact": "output/security_audit/findings.json",
+      "corrections": [
+        "findings_file_paths_valid"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-33.log",
+      "regressions": [
+        "expected_issue_hardcoded_secret_settings",
+        "summary_lists_all_findings"
+      ],
+      "task_id": "task_0033",
+      "transition": "0->20",
+      "write_log_line": 194
+    },
+    {
+      "artifact": "scripts/validate.sh",
+      "corrections": [
+        "validator_checks_for_cache"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-65.log",
+      "regressions": [
+        "validator_copies_fixture",
+        "validator_writes_report"
+      ],
+      "task_id": "task_0065",
+      "transition": "40->60",
+      "write_log_line": 188
+    },
+    {
+      "artifact": "output/report.txt",
+      "corrections": [
+        "report_mini_summary_two_lines"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-93.log",
+      "regressions": [
+        "report_llm_costs_match",
+        "report_markets_counts_match"
+      ],
+      "task_id": "task_0093",
+      "transition": "0->20",
+      "write_log_line": 348
+    },
+    {
+      "artifact": "output/PC_health_report.md",
+      "corrections": [
+        "health_report_links_to_outputs"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-100.log",
+      "regressions": [
+        "health_report_severity_totals",
+        "health_report_top_error_processes_listed"
+      ],
+      "task_id": "task_0100",
+      "transition": "0->20",
+      "write_log_line": 209
+    },
+    {
+      "artifact": "output/teaching_module_final.md",
+      "corrections": [
+        "final_module_timeline_exercise_updated"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-110.log",
+      "regressions": [
+        "final_module_character_focus_updated",
+        "final_module_reading_assignment_updated"
+      ],
+      "task_id": "task_0110",
+      "transition": "40->60",
+      "write_log_line": 250
+    },
+    {
+      "artifact": "scripts/parse_rules.py",
+      "corrections": [
+        "bonfires_conditional_auth_area_both_sources",
+        "rules_values_normalized"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-115.log",
+      "regressions": [
+        "waste_separate_bins_both_sources"
+      ],
+      "task_id": "task_0115",
+      "transition": "40->60",
+      "write_log_line": 200
+    },
+    {
+      "artifact": "output/shortlist.csv",
+      "corrections": [
+        "report_top_consistency",
+        "sorting_descending_by_reliability"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_99/instance-eval-137.log",
+      "regressions": [
+        "distances_correct"
+      ],
+      "task_id": "task_0137",
+      "transition": "80->100",
+      "write_log_line": 335
+    },
+    {
+      "artifact": "output/signals.json",
+      "corrections": [
+        "signals_count_correct"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-167.log",
+      "regressions": [
+        "signals_groups_correct",
+        "signals_values_correct"
+      ],
+      "task_id": "task_0167",
+      "transition": "40->60",
+      "write_log_line": 312
+    },
+    {
+      "artifact": "output/status_update.md",
+      "corrections": [
+        "status_update_upcoming_events"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-182.log",
+      "regressions": [
+        "status_update_follow_up_targets",
+        "status_update_roster_counts"
+      ],
+      "task_id": "task_0182",
+      "transition": "0->20",
+      "write_log_line": 376
+    },
+    {
+      "artifact": "workspace/report/assumption_impact.md",
+      "corrections": [
+        "report_explanation_word_limit"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_99/instance-eval-12.log",
+      "regressions": [
+        "report_increase_decrease_counts_correct"
+      ],
+      "task_id": "task_0012",
+      "transition": "80->100",
+      "write_log_line": 481
+    },
+    {
+      "artifact": "out/status_update.md",
+      "corrections": [
+        "status_update_open_eigensolver_count_included"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-31.log",
+      "regressions": [
+        "status_update_top_3_bullets_correct"
+      ],
+      "task_id": "task_0031",
+      "transition": "40->60",
+      "write_log_line": 140
+    },
+    {
+      "artifact": "output/weekly_summary.md",
+      "corrections": [
+        "weekly_summary_totals_section"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-46.log",
+      "regressions": [
+        "weekly_summary_validation_status_section"
+      ],
+      "task_id": "task_0046",
+      "transition": "40->60",
+      "write_log_line": 169
+    },
+    {
+      "artifact": "outputs/report.md",
+      "corrections": [
+        "interpretation_length"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-48.log",
+      "regressions": [
+        "abstract_length_and_originality"
+      ],
+      "task_id": "task_0048",
+      "transition": "40->60",
+      "write_log_line": 163
+    },
+    {
+      "artifact": "output/risk_report.md",
+      "corrections": [
+        "risk_report_sections_present"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_99/instance-eval-51.log",
+      "regressions": [
+        "risk_report_key_stats_numbers"
+      ],
+      "task_id": "task_0051",
+      "transition": "80->100",
+      "write_log_line": 129
+    },
+    {
+      "artifact": "output/summary/lottery_summary.json",
+      "corrections": [
+        "summary_totals_correct"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-53.log",
+      "regressions": [
+        "summary_by_month_correct"
+      ],
+      "task_id": "task_0053",
+      "transition": "20->40",
+      "write_log_line": 208
+    },
+    {
+      "artifact": "output/summary/lottery_summary.json",
+      "corrections": [
+        "summary_by_game_correct"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-53.log",
+      "regressions": [
+        "summary_totals_correct"
+      ],
+      "task_id": "task_0053",
+      "transition": "40->60",
+      "write_log_line": 166
+    },
+    {
+      "artifact": "output/validation_report.txt",
+      "corrections": [
+        "validation_report_has_required_lines"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-83.log",
+      "regressions": [
+        "numbers_consistent_across_files"
+      ],
+      "task_id": "task_0083",
+      "transition": "20->40",
+      "write_log_line": 196
+    },
+    {
+      "artifact": "output/validation_report.txt",
+      "corrections": [
+        "validation_report_has_required_lines"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_79/instance-eval-83.log",
+      "regressions": [
+        "numbers_consistent_across_files"
+      ],
+      "task_id": "task_0083",
+      "transition": "60->80",
+      "write_log_line": 238
+    },
+    {
+      "artifact": "output/followups_due_7d.md",
+      "corrections": [
+        "followups_sorted"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-87.log",
+      "regressions": [
+        "followups_lines_match_set"
+      ],
+      "task_id": "task_0087",
+      "transition": "40->60",
+      "write_log_line": 161
+    },
+    {
+      "artifact": "output/top_error_processes.csv",
+      "corrections": [
+        "top_error_processes_values_and_sort"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_79/instance-eval-100.log",
+      "regressions": [
+        "top_error_processes_match_syslog_counts"
+      ],
+      "task_id": "task_0100",
+      "transition": "60->80",
+      "write_log_line": 189
+    },
+    {
+      "artifact": "output/outreach_emails_polished.jsonl",
+      "corrections": [
+        "emails_body_word_count_range_all"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_39/instance-eval-101.log",
+      "regressions": [
+        "emails_works_arrays_match_csv"
+      ],
+      "task_id": "task_0101",
+      "transition": "20->40",
+      "write_log_line": 157
+    },
+    {
+      "artifact": "output/outreach_emails_polished.jsonl",
+      "corrections": [
+        "emails_works_arrays_match_csv"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-101.log",
+      "regressions": [
+        "emails_body_word_count_range_all"
+      ],
+      "task_id": "task_0101",
+      "transition": "40->60",
+      "write_log_line": 201
+    },
+    {
+      "artifact": "outputs/priority_rankings.csv",
+      "corrections": [
+        "priority_rankings_correct"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_59/instance-eval-108.log",
+      "regressions": [
+        "leaflet_top_wards_list_correct"
+      ],
+      "task_id": "task_0108",
+      "transition": "40->60",
+      "write_log_line": 365
+    },
+    {
+      "artifact": "output/teaching_module_final.md",
+      "corrections": [
+        "final_module_timeline_exercise_updated"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_99/instance-eval-110.log",
+      "regressions": [
+        "final_module_character_focus_updated"
+      ],
+      "task_id": "task_0110",
+      "transition": "80->100",
+      "write_log_line": 971
+    },
+    {
+      "artifact": "output/draft_email_twelfth_night_2024-09-16_to_2024-09-22.txt",
+      "corrections": [
+        "email_closing_signature"
+      ],
+      "instance_log": "/root/openclaw-rl-local/outputs/clawgym-official-30b-formal-retrain-routing-tis-det-retry1-20260826-0129/openclaw_logs/rollout_19/instance-eval-113.log",
+      "regressions": [
+        "email_summary_matches_schedule"
+      ],
+      "task_id": "task_0113",
+      "transition": "0->20",
+      "write_log_line": 172
+    }
+  ],
+  "schema_version": 1
+}

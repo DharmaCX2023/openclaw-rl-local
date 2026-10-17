@@ -1,0 +1,90 @@
+{
+  "contract_version": 1,
+  "purpose": "ClawGym paper SFT/runtime alignment; this file does not start training",
+  "openclaw": {
+    "version": "2026.4.1",
+    "tag": "v2026.4.1",
+    "upstream_repo": "https://github.com/openclaw/openclaw",
+    "upstream_commit": "da64a978e5814567f7797cc34fbe29b61b7eae7a"
+  },
+  "clawgym": {
+    "repo": "https://github.com/ClawGym/ClawGym-Agents",
+    "observed_commit": "0e8526d8f5e0999896c74cee4d6b998fb8a0429e",
+    "note": "Official RL README selects ghcr.io/openclaw/openclaw:2026.4.1."
+  },
+  "raw_sft_fingerprints": {
+    "trajectories": 24497,
+    "system_prompt_sha256": "2866a28510c621af541c59a78644858d57da5509d1110a37f5e73c8a95ce60f1",
+    "system_prompt_variants": 1,
+    "tool_schema_sha256": "14cae41f29ec26daebabaec7627c92093e0f0fd2ca39b51e6ae7b050c05663d1",
+    "tool_schema_note": "Exact match to ClawGym SFT/process_scripts/sft_data_pre_tokenize_toolcall_for_openclaw.py hard-coded tools; do not use it to infer runtime version."
+  },
+  "target_tool_order": [
+    "read",
+    "edit",
+    "write",
+    "exec",
+    "process",
+    "web_fetch"
+  ],
+  "bundled_skills": [
+    {
+      "name": "clawflow",
+      "path": "openclaw/skills/clawflow/SKILL.md",
+      "sha256": "9ec8dcbc6bbcb4cdd0ed970f54e1cf53f06b2757893a1fe731f0b390ec6b3b1b"
+    },
+    {
+      "name": "clawflow-inbox-triage",
+      "path": "openclaw/skills/clawflow-inbox-triage/SKILL.md",
+      "sha256": "a8b682bd812c1928a6ba55f5507107b9f09f92d0db36f8a7a92a5064732608af"
+    },
+    {
+      "name": "healthcheck",
+      "path": "openclaw/skills/healthcheck/SKILL.md",
+      "sha256": "adba53ffae3924e411b0e73737ed9f0917b79cd5a7e64f0f9d03600126a07085"
+    },
+    {
+      "name": "node-connect",
+      "path": "openclaw/skills/node-connect/SKILL.md",
+      "sha256": "3b89d261b5737609df82ee7ad41e8464065a334f17d803b420507c092ed0f321"
+    },
+    {
+      "name": "skill-creator",
+      "path": "openclaw/skills/skill-creator/SKILL.md",
+      "sha256": "c24f65fc88b9fb258a8d3a673e3c6de309a01b619c3865af8f01ef164abfeb01"
+    },
+    {
+      "name": "weather",
+      "path": "openclaw/skills/weather/SKILL.md",
+      "sha256": "cf05b61bf3204776f8cbc84a0ab54d0e0fb1f8bda7af3962b8a0390f2ed3b4d2"
+    }
+  ],
+  "managed_skills": [
+    {
+      "name": "serper",
+      "version": "0.1.0",
+      "status": "recovered_from_sft_observation_not_public_git",
+      "contract_path": "sft_contract/recovered_skills/serper/SKILL.md",
+      "canonical_sha256": "a24e8ad9ba871137952ac143d8a2db867694bd24616d01939e0a4ae958b6fe67",
+      "canonical_trajectories": 1590,
+      "whitespace_equivalent_sha256": "74a3d07db423f37c03363fa0935dd2332538aebd2bc1897532cd6d0c10081672",
+      "whitespace_equivalent_trajectories": 854,
+      "older_sha256": "9b161a88e59fb749880d0908d491627dead7a3f06fc03a28227d2af5802937b0",
+      "older_trajectories": 396,
+      "truncated_observation_sha256": "eb786855125db9e7d462105eccd83e2c8e6af4605aad00207947af2488e6aa0d",
+      "truncated_observation_trajectories": 2,
+      "runtime_warning": "The exact scripts/search.py source was not present in SFT observations and no exact public GitHub match was found. Do not claim exact RL runtime reproduction until it is sourced or an intentional compatible replacement is documented."
+    }
+  ],
+  "sft_filter": {
+    "status": "completed_no_training_started",
+    "max_tokens": 65536,
+    "kept": 22631,
+    "rejected": 1866,
+    "empty_assistant_messages_removed": 653,
+    "system_prompt_path": "sft_contract/system_prompt.txt",
+    "system_prompt_sha256": "c6bd8aecbd320671714a7e290da0c39546b07af0f8929659dad51808f7b47472",
+    "tool_schemas_path": "sft_contract/six_tool_schemas.json",
+    "tool_schemas_sha256": "c8ddd916b23e1e6686f36d0bff59ba0d7501b9705344dc25465e346ed2d1d931"
+  }
+}

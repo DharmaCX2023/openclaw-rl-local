@@ -1,0 +1,6 @@
+snapshot_date_utc=2026-08-08
+local_root=/root/openclaw-rl-local
+harness_source=/mnt/Openclaw-RL-hareness
+runtime_source=/mnt/OpenClaw-RL
+historical_outputs_copied=no
+sft_checkpoint_copied=no

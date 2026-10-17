@@ -1,0 +1,125 @@
+{
+  "ambiguous_trajectories_excluded": 0,
+  "beta": 0.02,
+  "categories": {
+    "final_or_text": {
+      "count": 28,
+      "fraction": 0.07017543859649122,
+      "fraction_weight_gt_1": 0.6785714285714286,
+      "mean_weight": 1.0592678466013499,
+      "mean_weight_difference_vs_other": 0.05115673568531509,
+      "within_trajectory_permutation_p_two_sided": 0.000999000999000999
+    },
+    "identical_tool_repeat": {
+      "count": 80,
+      "fraction": 0.20050125313283207,
+      "fraction_weight_gt_1": 0.2125,
+      "mean_weight": 0.9762701183557511,
+      "mean_weight_difference_vs_other": -0.04431644084872122,
+      "within_trajectory_permutation_p_two_sided": 0.000999000999000999
+    },
+    "incomplete_tool_at_limit": {
+      "count": 6,
+      "fraction": 0.015037593984962405,
+      "fraction_weight_gt_1": 0.3333333333333333,
+      "mean_weight": 0.9967919190724691,
+      "mean_weight_difference_vs_other": -0.015136758638095604,
+      "within_trajectory_permutation_p_two_sided": 0.5954045954045954
+    },
+    "repetition_degenerated": {
+      "count": 2,
+      "fraction": 0.005012531328320802,
+      "fraction_weight_gt_1": 0.0,
+      "mean_weight": 0.9852972626686096,
+      "mean_weight_difference_vs_other": -0.0265368112088451,
+      "within_trajectory_permutation_p_two_sided": 0.6423576423576424
+    },
+    "tool_edit": {
+      "count": 21,
+      "fraction": 0.05263157894736842,
+      "fraction_weight_gt_1": 0.047619047619047616,
+      "mean_weight": 0.9741500644456773,
+      "mean_weight_difference_vs_other": -0.039637159102808184,
+      "within_trajectory_permutation_p_two_sided": 0.003996003996003996
+    },
+    "tool_exec": {
+      "count": 249,
+      "fraction": 0.6240601503759399,
+      "fraction_weight_gt_1": 0.5742971887550201,
+      "mean_weight": 1.019479570618595,
+      "mean_weight_difference_vs_other": 0.020690845480884512,
+      "within_trajectory_permutation_p_two_sided": 0.030969030969030968
+    },
+    "tool_parse_failure": {
+      "count": 12,
+      "fraction": 0.03007518796992481,
+      "fraction_weight_gt_1": 0.25,
+      "mean_weight": 0.9955974767605463,
+      "mean_weight_difference_vs_other": -0.01660291634942823,
+      "within_trajectory_permutation_p_two_sided": 0.26973026973026976
+    },
+    "tool_process": {
+      "count": 13,
+      "fraction": 0.03258145363408521,
+      "fraction_weight_gt_1": 0.07692307692307693,
+      "mean_weight": 0.9728326935034531,
+      "mean_weight_difference_vs_other": -0.04017740193473818,
+      "within_trajectory_permutation_p_two_sided": 0.002997002997002997
+    },
+    "tool_read": {
+      "count": 46,
+      "fraction": 0.11528822055137844,
+      "fraction_weight_gt_1": 0.32608695652173914,
+      "mean_weight": 0.9749741891156072,
+      "mean_weight_difference_vs_other": -0.04151280565880877,
+      "within_trajectory_permutation_p_two_sided": 0.002997002997002997
+    },
+    "tool_result_error": {
+      "count": 113,
+      "fraction": 0.2832080200501253,
+      "fraction_weight_gt_1": 0.25663716814159293,
+      "mean_weight": 0.9874220005178873,
+      "mean_weight_difference_vs_other": -0.03387183093723678,
+      "within_trajectory_permutation_p_two_sided": 0.001998001998001998
+    },
+    "tool_web_fetch": {
+      "count": 4,
+      "fraction": 0.010025062656641603,
+      "fraction_weight_gt_1": 1.0,
+      "mean_weight": 1.0699490308761597,
+      "mean_weight_difference_vs_other": 0.058837826493420176,
+      "within_trajectory_permutation_p_two_sided": 0.1968031968031968
+    },
+    "tool_write": {
+      "count": 48,
+      "fraction": 0.12030075187969924,
+      "fraction_weight_gt_1": 0.2708333333333333,
+      "mean_weight": 0.9904681754608949,
+      "mean_weight_difference_vs_other": -0.024136523777178565,
+      "within_trajectory_permutation_p_two_sided": 0.0979020979020979
+    },
+    "validation_exec": {
+      "count": 23,
+      "fraction": 0.05764411027568922,
+      "fraction_weight_gt_1": 0.6521739130434783,
+      "mean_weight": 1.0124564196752466,
+      "mean_weight_difference_vs_other": 0.0008015680737676334,
+      "within_trajectory_permutation_p_two_sided": 0.9370629370629371
+    },
+    "workspace_mutation": {
+      "count": 60,
+      "fraction": 0.15037593984962405,
+      "fraction_weight_gt_1": 0.23333333333333334,
+      "mean_weight": 0.9878246376911799,
+      "mean_weight_difference_vs_other": -0.02810233456019451,
+      "within_trajectory_permutation_p_two_sided": 0.014985014985014986
+    }
+  },
+  "matched_steps": 399,
+  "missing_trajectories_excluded": 0,
+  "note": "Associational diagnostic on exact unique group/step-set joins only; content is never emitted.",
+  "schema_version": 2,
+  "summary_steps": 399,
+  "summary_trajectories": 30,
+  "uniquely_matched_trajectories": 30
+}

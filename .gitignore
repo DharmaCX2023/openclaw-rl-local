@@ -1,0 +1,77 @@
+# Generated training data and rollout artifacts.
+outputs/
+data/clawgym-trajectory/*.jsonl
+
+# Python runtime caches.
+**/__pycache__/
+*.py[cod]
+
+# Machine-local copied Python environment.
+.venv-openclaw/
+.venv-openclaw
+
+# Local credentials and endpoint configuration.
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+
+# Local environments, caches, logs and editor/patch backups.
+/.venv-*/
+**/.pytest_cache/
+**/.ruff_cache/
+*.log
+*.stdout
+*.stderr
+*.orig
+*.rej
+*.bak
+*.swp
+*~
+/slime/slime/backends/megatron_utils/loss.py.pre_logical_normalizer_fix_20260903
+
+# Prepared training/evaluation data, not task definitions or data-build scripts.
+/data/clawgym-trajectory/sft_qwen3_8b_*/
+/data/clawgym_eval_smoke_*/
+/.base_eval_preflight_tasks_*/
+
+# Machine-local model links; versioned model configuration copies live in configs/.
+/models/
+/models
+
+# Model weights, optimizer states, checkpoints, and generated training state.
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.distcp
+*.onnx
+*.gguf
+checkpoints/
+rollout_data/
+span_audit/
+tensorboard/
+wandb/
+
+# Nested upstream clones: versions and local changes live in third_party/README.local.md.
+/third_party/OpenRLHF/
+/third_party/ClawGym-Agents-upstream/
+
+# Rebuildable report bundles and raw archived experiment outputs.
+/reports/**/*.zip
+/reports/archived_smoke_ab_20260825/
+/reports/clawgym_verifier_structure_20260821.json
+/reports/GRPO_OPSD_8B_REVIEW_20260907/SHA256SUMS
+/reports/GRPO_OPSD_8B_REVIEW_20260907/data/opsd_logical_rollouts.csv
+/reports/GRPO_OPSD_8B_REVIEW_20260907/data/opsd_segments.csv
+/reports/GRPO_OPSD_8B_REVIEW_20260907/data/opsd_turn_weights.csv
+/reports/GRPO_OPSD_8B_REVIEW_20260907/data/tensorboard_scalars.csv
+/reports/GRPO_OPSD_8B_REVIEW_20260907/data/train_trajectory_headers.csv
+
+# Large research presentation and generated audits; keep source documents and summaries.
+/research/*.pptx
+/research/*.json
+!/research/*.summary.json
+!/research/opd_precheck_statistics_*.json
+!/research/opd_same_policy_statistics_*.json

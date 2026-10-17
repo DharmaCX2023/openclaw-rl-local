@@ -1,0 +1,70 @@
+# Verified repair method figure — generation prompt
+
+Mode: built-in imagegen. The exposed interface does not provide an explicit image2 model selector.
+Status: concept figure; all before/after paths are schematic, not measured results.
+
+```text
+Use case: infographic-diagram.
+Asset type: one publication-quality research method figure for a machine learning paper, also readable in a presentation.
+Primary request: Explain the proposed research design "From Verified Repairs to Policy Improvement" with a clear distinction between established components and the proposed algorithmic focus: first-barrier sampling-support calibration. This is a proposed method, not measured experimental results. Do not imply novelty has been established.
+
+Create a brand new, high-resolution, wide landscape 16:9 bitmap, ideal 3200 by 1800 or higher legible resolution. White background, precise vector-like scientific illustration, consistent dark navy sans-serif type, crisp orthogonal connectors and generous spacing. No photorealism, no decorative robots, no logos, no watermark. Do not include a benchmark name or the phrase "for Tool Agents". English labels only. All words must be correctly spelled, large enough to read, with no overlap or clipping.
+
+LAYOUT:
+Top 12%: strong title "From Verified Repairs to Policy Improvement". Smaller subtitle "Sampling-Aware Self-Distillation | Proposed research design".
+Main middle area: three horizontally aligned rounded rectangular panels, numbered 1, 2, 3. Panel widths approximately 24%, 33%, 39%, with ample gutters and arrows between. Panels 1 and 2 have muted blue/teal accents. Panel 3 is the dominant visual with a stronger amber outline and a small badge "PROPOSED CORE". Bottom 16%: one clean objective ribbon and an evidence-test strip. Leave a proper outer margin.
+
+PANEL 1 — header "1  Generate a complete repair"
+A blue shared-context node labeled "Student-visited state h" fans into:
+- a coral rounded action block "Original action c−", visualized as a short sequence of three token rectangles;
+- a teal rounded action block "Repair action c+", visualized as a longer coherent sequence of six token rectangles.
+A small frozen-teacher box above the repair branch receives a thin dashed arrow labeled "Hindsight" and the same h. Hindsight must NOT flow into the student scoring input or the environment continuation.
+Below, two short explanatory lines:
+"Same state, independent prefixes"
+"Stop before an unseen observation"
+These are complete alternative actions, not token-by-token aligned replacements. Show no arrows matching individual original and repaired tokens.
+
+PANEL 2 — header "2  Execute and verify"
+Show a neutral cylinder or stacked snapshot icon labeled "Same snapshot".
+Two neatly aligned independent horizontal tracks:
+Upper coral track: "c−" → "Real result" → "Student" → "V−".
+Lower teal track: "c+" → "Real result" → "Student" → "V+".
+The two Student boxes are the same frozen continuation policy and have a shared brace/caption "Matched continuation budgets".
+Join the score endpoints into a diamond or rounded decision box "V+ > V− ?".
+A clear teal PASS arrow leads to a box "Verified pair (h, c+, c−)", then toward Panel 3.
+A small neutral FAIL branch ends at "No repair supervision".
+At the bottom, use the short footnote "Reject unstable or regressive pairs".
+Do not show invented tool results or reuse an original observation on the repair branch. No numerical reward values.
+
+PANEL 3 — header "3  Open the first sampling barrier"
+Badge "PROPOSED CORE" under or above the header, not overlaid on text.
+Use two aligned schematic token paths, with each token a large square:
+First row caption "Before update".
+Token positions y1, y2, y3, y4, y5 shown left to right. y1 and y2 are pale teal with check marks; y3 is amber/coral outlined with an x and a label below "first excluded token t*"; y4 and y5 are neutral grey and not marked as accessible.
+Second row caption "After a local update (schematic)".
+y1, y2, y3 have teal check marks; y4 now has the amber x; y5 stays grey. A subtle amber annotation arrow emphasizes the barrier advances after recomputation, rather than scoring all positions indiscriminately.
+Below this, a spacious miniature sampling-support diagram:
+- a light blue rectangular band labeled "Candidate set C" above a horizontal dashed line labeled "boundary b";
+- a coral point below the boundary labeled "repair token";
+- a vertical amber arrow from that point to a teal point just inside the band, slightly above the boundary;
+- label the gap above the boundary "margin m".
+The diagram is illustrative, not empirical. Do not use numerical axes.
+Place the simple readable formula below:
+"L_entry = max(0, m + sg(b) − u(y+))"
+Under it, two short lines:
+"Only the first excluded token is targeted"
+"Recompute the boundary after each update"
+Use a small definition "u: sampling logit   sg: stop-gradient".
+The candidate set is generated by the ACTUAL top-k / top-p sampler. A compact label "Actual top-k / top-p support" may be above the mini-diagram.
+The formula is evaluated only when an excluded position exists; a tiny note "No excluded token → no entry loss".
+Do not imply that crossing one barrier guarantees full task success. After-update row is explicitly schematic, not guaranteed from a single optimizer step.
+
+BOTTOM RIBBON:
+Large centered formula "L = L_GRPO + λp L_pref + λm L_entry"
+Directly underneath, three color-keyed phrases: "Task outcome" in blue, "Verified action preference" in teal, "First-barrier calibration" in amber.
+Thin evidence-test strip:
+"Critical test: same verified pairs • NLL vs DPO vs DPO + entry • real rollout performance"
+Final small but readable note "Hypothesis to validate — not an established gain".
+
+Optimize hierarchy, precision of branch logic, readability of mathematical labels, and whitespace. Panel 3 must read as the single conceptual focus; panels 1–2 are supporting infrastructure. No performance graphs, fake benchmark scores, extra arrows, extra methodology, or decorative text.
+```

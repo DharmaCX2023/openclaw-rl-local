@@ -1,0 +1,109 @@
+{
+  "project": "/root/openclaw-rl-local",
+  "runs": {
+    "grpo": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904",
+    "opsd": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904"
+  },
+  "eval_sources": [
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000020/manifest.json",
+      "bytes": 88710,
+      "sha256": "7ee0833db3841026e48175b16b00a7c2c4bfd7a27212d6eff8aed85aa736e49f"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000020/results.jsonl",
+      "bytes": 2011372,
+      "sha256": "ddc1c32779d400eacd77955f3ecc10001759bb2a7fa06744304c3b6bafff18b0"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000040/manifest.json",
+      "bytes": 88712,
+      "sha256": "863b840784cf64f5dbcc0f105bd990ce83c38f1644b2b6b886694f8f86f36c04"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000040/results.jsonl",
+      "bytes": 2016780,
+      "sha256": "f8074f2a96eaea3f68382c5e3569761799e5e7ef2f67ee47e04164ef01195946"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000060/manifest.json",
+      "bytes": 88708,
+      "sha256": "83bf90e4b942e07db3618da15cacf4d304f399e605350574a70dc3101351845d"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000060/results.jsonl",
+      "bytes": 2278401,
+      "sha256": "20f9c661e6155c8300c33f2f00ee1de4919a78aad8566fb13a9941ec69ef3345"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000080/manifest.json",
+      "bytes": 88712,
+      "sha256": "7a9f3411250f487dd1f2bf838d076fdd8496c77aea204d25d38624af197e621a"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000080/results.jsonl",
+      "bytes": 1827917,
+      "sha256": "187d1c27b1595f6e4d28b6186d1c92ba848e37d8faac8994322dd71e5c34b63d"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000100/manifest.json",
+      "bytes": 88713,
+      "sha256": "daa6e90d7bb612ac442fdb7175a8e4c9920aa7e1d992de5c5eeb8ac709b9e71f"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-grpo-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000100/results.jsonl",
+      "bytes": 2154592,
+      "sha256": "fb9e5ce6f57473324b1471de3e4b159c888c2b82e29e0d5e308d6f2049f316e0"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000020/manifest.json",
+      "bytes": 88711,
+      "sha256": "d3065e937f741e1c9693737090a06f51da34d76688dbe74b5e017f6e16daedcb"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000020/results.jsonl",
+      "bytes": 1827325,
+      "sha256": "0fd7296b6edc1f9c4515ae2c45afe928a1ce873878a4a85fd50a9e1a86934083"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000040/manifest.json",
+      "bytes": 88710,
+      "sha256": "fa9b9c2ad5517e44b2aed6d303766b0fd128bf841601711e7f2fe3f54afa72a5"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000040/results.jsonl",
+      "bytes": 2247541,
+      "sha256": "b058b2a3a30054b8359d16789eeaa36966f00bd8ff396897fbf27c381ee519ed"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000060/manifest.json",
+      "bytes": 88711,
+      "sha256": "a60c38ab77db004e0d666ed1faf88890a06086df3339ba58a1aa14ce77ced475"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000060/results.jsonl",
+      "bytes": 2219344,
+      "sha256": "ca340fb37febc5c4cd8027da68f5d8bba28a79127eed934acd983f8eff3deea2"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000080/manifest.json",
+      "bytes": 88711,
+      "sha256": "8849cbb4207ce8ee8fcaf0a9069911700f591effd53985946475a0ccdf122de8"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000080/results.jsonl",
+      "bytes": 2226909,
+      "sha256": "3f5385de759dd098968975f15865b12567d975f0709793c10aa114810bcb62c4"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000100/manifest.json",
+      "bytes": 88714,
+      "sha256": "bcf9bb637f4c1cf614cf1de08e785ceaec61e2be64378d550efa4300ab4b2453"
+    },
+    {
+      "path": "/root/openclaw-rl-local/outputs/qwen3-8b-opsd-formal-seed0-formal-v3-20260904/checkpoints/eval_artifacts/train_step_000100/results.jsonl",
+      "bytes": 2221152,
+      "sha256": "8fd49bd18c711ecefbb0cf4ecb4e0e77212767033e424565f2f44560da26ab08"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Unified patches contain required space-only context markers.
+patches/*.patch -whitespace
+
+# Markdown uses two trailing spaces for an intentional hard line break.
+*.md whitespace=-blank-at-eol

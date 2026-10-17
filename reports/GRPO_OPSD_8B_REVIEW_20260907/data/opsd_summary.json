@@ -1,0 +1,67 @@
+{
+  "scored_turns": 49979,
+  "scored_segments": 6739,
+  "scored_logical_rollouts": 2474,
+  "total_segments": 13648,
+  "total_logical_rollouts": 5992,
+  "negative_logical_rollouts": 2513,
+  "requested_segments": 13271,
+  "fallback_counts": {
+    "": 13612,
+    "trajectory_segment_ineligible": 25,
+    "hint_overflow": 5,
+    "infrastructure_failure": 3,
+    "render_mismatch": 2,
+    "teacher_scoring_failed": 1
+  },
+  "duplicate_logical_turn_records": 0,
+  "weight": {
+    "n": 49979,
+    "mean": 1.0383433763548764,
+    "p50": 1.031656265258789,
+    "p90": 1.0821126222610473,
+    "p95": 1.097411334514618,
+    "p99": 1.12760146856308,
+    "max": 1.2000000476837158,
+    "min": 0.4866936504840851
+  },
+  "delta": {
+    "n": 49979,
+    "mean": -0.03717748415106604,
+    "p50": -0.03116557002067566,
+    "p90": -0.004580039437860247,
+    "p95": -0.002055460144765678,
+    "p99": 0.0014576681866310555,
+    "max": 0.7201204299926758,
+    "min": -0.3070466220378876
+  },
+  "fraction_gt_1": 0.9874547309870145,
+  "fraction_lt_1": 0.012545269012985454,
+  "fraction_at_1": 0.0,
+  "fraction_ge_upper": 0.0005602352988255067,
+  "histogram_below_0p9_count": 42,
+  "token_weight_mean": 1.0284889347148651,
+  "logical_equal_weight_mean": 1.035037541049439,
+  "all_turns_penalized_trajectory_fraction": 0.7983023443815683,
+  "within_trajectory_std": {
+    "n": 2474,
+    "mean": 0.026542354155071328,
+    "p50": 0.024903548397822863,
+    "p90": 0.040360605512810004,
+    "p95": 0.04811407300421796,
+    "p99": 0.0703422249929762,
+    "max": 0.18174174788002645,
+    "min": 3.552436828613281e-05
+  },
+  "within_trajectory_range": {
+    "n": 2474,
+    "mean": 0.08891457508385134,
+    "p50": 0.08202296495437622,
+    "p90": 0.14383727908134464,
+    "p95": 0.1672063380479812,
+    "p99": 0.2543485504388809,
+    "max": 0.635097473859787,
+    "min": 7.104873657226562e-05
+  },
+  "delta_length_spearman": 0.01606465687814251
+}

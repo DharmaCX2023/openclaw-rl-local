@@ -1,0 +1,31 @@
+#!/bin/bash
+set -euo pipefail
+
+cd /root/openclaw-rl-local
+
+export RUN_STAMP=20260821-tp2x2-ab
+export EXP_NAME=rl-e2e-tp2x2-ab-20260821
+export SAVE_CKPT=/root/openclaw-rl-local/outputs/rl-e2e-tp2x2-ab-20260821
+export NUM_ROLLOUT=1
+export ROLLOUT_BATCH_SIZE=8
+export N_SAMPLES_PER_PROMPT=8
+export OPENCLAW_TRAIN_NUM_WORKERS=32
+export OPENCLAW_REMOTE_DOCKER_START_CONCURRENCY=8
+export OPENCLAW_DISABLE_CHECKPOINT_SAVE=1
+export EVAL_INTERVAL=999
+export USE_TENSORBOARD=1
+export SGLANG_TP=2
+export SGLANG_SESSION_AFFINITY=1
+export SGLANG_ENABLE_DETERMINISTIC_INFERENCE=0
+export OPENCLAW_TRAIN_SHUFFLE_SEED=0
+export OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE=20260821
+export OPENCLAW_DETERMINISTIC_TOOL_CALL_IDS=1
+export PORT=30501
+export OPENCLAW_REMOTE_PROXY_PORT=39581
+export OPENCLAW_GATEWAY_PORT_BASE=52000
+export OPENCLAW_GATEWAY_PORT_TRAIN_OFFSET=0
+export OPENCLAW_GATEWAY_PORT_MAX_SLOTS=200
+export OPENCLAW_REMOTE_BASE=/root/clawgym_rl_runs/e2e_tp2x2_ab_20260821
+
+exec bash clawgym-official/run_qwen3_30b_a3b_official_remote_grpo.sh \
+  >/root/openclaw-rl-local/outputs/rl-e2e-tp2x2-ab-20260821.launch.log 2>&1

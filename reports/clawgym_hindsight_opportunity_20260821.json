@@ -1,0 +1,513 @@
+{
+  "coverage": {
+    "trajectories": 6395,
+    "rollouts": 100,
+    "rollout_min": 0,
+    "rollout_max": 99,
+    "unique_tasks": 800,
+    "groups": 800,
+    "complete_groups": 796,
+    "incomplete_groups": 4,
+    "incomplete_group_sizes": {
+      "7": 3,
+      "6": 1
+    },
+    "files_seen": 6395,
+    "malformed_files": []
+  },
+  "trajectory": {
+    "reward": {
+      "n": 6395,
+      "mean": 0.6754037335418296,
+      "median": 0.75,
+      "p90": 0.95,
+      "p95": 1.0,
+      "max": 1.0
+    },
+    "steps": {
+      "n": 6395,
+      "mean": 18.57122752150117,
+      "median": 9,
+      "p90": 53.0,
+      "p95": 96.0,
+      "max": 96
+    },
+    "actions": {
+      "n": 6395,
+      "mean": 22.62392494136044,
+      "median": 13,
+      "p90": 57.0,
+      "p95": 96.0,
+      "max": 292
+    },
+    "compactions": {
+      "n": 6395,
+      "mean": 0.0003127443315089914,
+      "median": 0,
+      "p90": 0.0,
+      "p95": 0.0,
+      "max": 1
+    },
+    "pruning_events": {
+      "n": 6395,
+      "mean": 1.3488663017982798,
+      "median": 0,
+      "p90": 1.0,
+      "p95": 10.299999999999272,
+      "max": 87
+    },
+    "terminations": {
+      "natural_completion": 5615,
+      "max_agent_steps": 337,
+      "length_limited_incomplete_tool_call": 326,
+      "length_limited_valid_response": 117
+    },
+    "reward_buckets": {
+      "zero": {
+        "count": 389,
+        "fraction": 0.06082877247849883,
+        "steps": {
+          "n": 389,
+          "mean": 34.38560411311054,
+          "median": 10,
+          "p90": 96.0,
+          "p95": 96.0,
+          "max": 96
+        },
+        "actions": {
+          "n": 389,
+          "mean": 37.3573264781491,
+          "median": 15,
+          "p90": 97.0,
+          "p95": 99.0,
+          "max": 292
+        },
+        "errors": {
+          "n": 389,
+          "mean": 3.0462724935732646,
+          "median": 0,
+          "p90": 10.399999999999977,
+          "p95": 18.0,
+          "max": 68
+        },
+        "max_steps_fraction": 0.23136246786632392
+      },
+      "low_(0,0.5]": {
+        "count": 992,
+        "fraction": 0.15512118842845973,
+        "steps": {
+          "n": 992,
+          "mean": 29.472782258064516,
+          "median": 12.0,
+          "p90": 96.0,
+          "p95": 96.0,
+          "max": 96
+        },
+        "actions": {
+          "n": 992,
+          "mean": 33.45564516129032,
+          "median": 17.0,
+          "p90": 97.0,
+          "p95": 99.0,
+          "max": 118
+        },
+        "errors": {
+          "n": 992,
+          "mean": 2.868951612903226,
+          "median": 0.0,
+          "p90": 7.0,
+          "p95": 13.0,
+          "max": 90
+        },
+        "max_steps_fraction": 0.14012096774193547
+      },
+      "mid_(0.5,1)": {
+        "count": 4479,
+        "fraction": 0.7003909304143863,
+        "steps": {
+          "n": 4479,
+          "mean": 15.657959365929894,
+          "median": 8,
+          "p90": 37.0,
+          "p95": 64.0,
+          "max": 96
+        },
+        "actions": {
+          "n": 4479,
+          "mean": 19.85577137753963,
+          "median": 13,
+          "p90": 43.0,
+          "p95": 67.0,
+          "max": 119
+        },
+        "errors": {
+          "n": 4479,
+          "mean": 1.2087519535610627,
+          "median": 0,
+          "p90": 3.0,
+          "p95": 6.0,
+          "max": 78
+        },
+        "max_steps_fraction": 0.023889260995757982
+      },
+      "perfect": {
+        "count": 535,
+        "fraction": 0.0836591086786552,
+        "steps": {
+          "n": 535,
+          "mean": 11.248598130841122,
+          "median": 7,
+          "p90": 21.600000000000023,
+          "p95": 37.59999999999991,
+          "max": 96
+        },
+        "actions": {
+          "n": 535,
+          "mean": 15.001869158878504,
+          "median": 11,
+          "p90": 27.0,
+          "p95": 41.0,
+          "max": 103
+        },
+        "errors": {
+          "n": 535,
+          "mean": 0.9644859813084112,
+          "median": 0,
+          "p90": 3.0,
+          "p95": 4.0,
+          "max": 17
+        },
+        "max_steps_fraction": 0.009345794392523364
+      }
+    }
+  },
+  "groups": {
+    "total_complete": 796,
+    "mixed": 750,
+    "mixed_fraction": 0.9422110552763819,
+    "all_equal": 46,
+    "all_zero": 3,
+    "all_perfect": 14,
+    "all_equal_partial": 29,
+    "gap": {
+      "n": 796,
+      "mean": 0.37642990452261305,
+      "median": 0.2773505,
+      "p90": 0.857143,
+      "p95": 0.9297615000000001,
+      "max": 1.0
+    },
+    "mixed_gap": {
+      "n": 750,
+      "mean": 0.3995176053333333,
+      "median": 0.30000000000000004,
+      "p90": 0.8677065,
+      "p95": 0.9375,
+      "max": 1.0
+    },
+    "trajectories_strictly_below_group_best": 4118,
+    "fraction_strictly_below_group_best": 0.6466708542713567,
+    "low_reward_with_better_sibling": 1191,
+    "zero_reward_with_positive_sibling": 364
+  },
+  "task_reuse": {
+    "trajectory_occurrences": {
+      "n": 800,
+      "mean": 7.99375,
+      "median": 8.0,
+      "p90": 8.0,
+      "p95": 8.0,
+      "max": 8
+    },
+    "group_occurrences": {
+      "n": 800,
+      "mean": 1.0,
+      "median": 1.0,
+      "p90": 1.0,
+      "p95": 1.0,
+      "max": 1
+    }
+  },
+  "long_failure_examples": [
+    {
+      "rollout": 72,
+      "instance": 16,
+      "task_id": "task_0021",
+      "group_index": 2,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 12,
+      "termination": "max_agent_steps",
+      "action_count": 96,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_72/instance-train-16.log"
+    },
+    {
+      "rollout": 72,
+      "instance": 20,
+      "task_id": "task_0021",
+      "group_index": 2,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 4,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_72/instance-train-20.log"
+    },
+    {
+      "rollout": 19,
+      "instance": 41,
+      "task_id": "task_0024",
+      "group_index": 5,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 17,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 5,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_19/instance-train-41.log"
+    },
+    {
+      "rollout": 34,
+      "instance": 7,
+      "task_id": "task_0049",
+      "group_index": 0,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 96,
+      "error_observation_count": 7,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_34/instance-train-7.log"
+    },
+    {
+      "rollout": 77,
+      "instance": 52,
+      "task_id": "task_0106",
+      "group_index": 6,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 22,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 4,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_77/instance-train-52.log"
+    },
+    {
+      "rollout": 77,
+      "instance": 55,
+      "task_id": "task_0106",
+      "group_index": 6,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 2,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_77/instance-train-55.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 11,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 14,
+      "termination": "max_agent_steps",
+      "action_count": 100,
+      "error_observation_count": 5,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-11.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 12,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 17,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 10,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-12.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 13,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 16,
+      "termination": "max_agent_steps",
+      "action_count": 100,
+      "error_observation_count": 6,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-13.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 14,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 22,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 2,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-14.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 15,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 99,
+      "error_observation_count": 5,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-15.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 8,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 101,
+      "error_observation_count": 3,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-8.log"
+    },
+    {
+      "rollout": 66,
+      "instance": 9,
+      "task_id": "task_0112",
+      "group_index": 1,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 61,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 2,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_66/instance-train-9.log"
+    },
+    {
+      "rollout": 56,
+      "instance": 17,
+      "task_id": "task_0129",
+      "group_index": 2,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_56/instance-train-17.log"
+    },
+    {
+      "rollout": 56,
+      "instance": 18,
+      "task_id": "task_0129",
+      "group_index": 2,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_56/instance-train-18.log"
+    },
+    {
+      "rollout": 56,
+      "instance": 20,
+      "task_id": "task_0129",
+      "group_index": 2,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 22,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 5,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_56/instance-train-20.log"
+    },
+    {
+      "rollout": 52,
+      "instance": 0,
+      "task_id": "task_0142",
+      "group_index": 0,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 97,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_52/instance-train-0.log"
+    },
+    {
+      "rollout": 52,
+      "instance": 1,
+      "task_id": "task_0142",
+      "group_index": 0,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 41,
+      "termination": "max_agent_steps",
+      "action_count": 96,
+      "error_observation_count": 1,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_52/instance-train-1.log"
+    },
+    {
+      "rollout": 52,
+      "instance": 2,
+      "task_id": "task_0142",
+      "group_index": 0,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 96,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_52/instance-train-2.log"
+    },
+    {
+      "rollout": 52,
+      "instance": 6,
+      "task_id": "task_0142",
+      "group_index": 0,
+      "reward": 0.0,
+      "steps": 96,
+      "compactions": 0,
+      "pruning_events": 0,
+      "termination": "max_agent_steps",
+      "action_count": 96,
+      "error_observation_count": 0,
+      "path": "outputs/clawgym-official-30b-formal-rl-local-retain-all-20260809-085700/openclaw_logs/rollout_52/instance-train-6.log"
+    }
+  ]
+}

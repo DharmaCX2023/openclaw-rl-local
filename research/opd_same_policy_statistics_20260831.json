@@ -1,0 +1,2019 @@
+{
+  "combined": {
+    "by_factor_count": {
+      "13-16": {
+        "mixed_actions": 6,
+        "rate": 0.23076923076923078,
+        "target_actions": 26,
+        "task_group_clusters": 6,
+        "wilson_95": [
+          0.11033849405783291,
+          0.42051554078943687
+        ]
+      },
+      "9-12": {
+        "mixed_actions": 2,
+        "rate": 0.06451612903225806,
+        "target_actions": 31,
+        "task_group_clusters": 7,
+        "wilson_95": [
+          0.017874783521914572,
+          0.20718636736298127
+        ]
+      },
+      "<=8": {
+        "mixed_actions": 0,
+        "rate": 0.0,
+        "target_actions": 17,
+        "task_group_clusters": 5,
+        "wilson_95": [
+          0.0,
+          0.1843181350088518
+        ]
+      },
+      ">=17": {
+        "mixed_actions": 46,
+        "rate": 0.32857142857142857,
+        "target_actions": 140,
+        "task_group_clusters": 17,
+        "wilson_95": [
+          0.25625571531552516,
+          0.41004355338255927
+        ]
+      }
+    },
+    "by_trajectory_steps": {
+      "11-20": {
+        "mixed_actions": 2,
+        "rate": 0.11764705882352941,
+        "target_actions": 17,
+        "task_group_clusters": 9,
+        "wilson_95": [
+          0.03287977376379267,
+          0.3433635059488588
+        ]
+      },
+      "21-40": {
+        "mixed_actions": 1,
+        "rate": 0.16666666666666666,
+        "target_actions": 6,
+        "task_group_clusters": 3,
+        "wilson_95": [
+          0.030053369748306635,
+          0.5635028221864702
+        ]
+      },
+      "<=10": {
+        "mixed_actions": 51,
+        "rate": 0.2670157068062827,
+        "target_actions": 191,
+        "task_group_clusters": 32,
+        "wilson_95": [
+          0.20932076607373148,
+          0.33389759957244425
+        ]
+      }
+    },
+    "mixed_actions": 54,
+    "rate": 0.2523364485981308,
+    "target_actions": 214,
+    "task_group_cluster_bootstrap_95": [
+      0.12299465240641712,
+      0.38132295719844356
+    ],
+    "task_group_clusters": 35,
+    "wilson_95": [
+      0.19885926503336981,
+      0.3145483270115912
+    ]
+  },
+  "gate_assessment": "borderline-supported: combined point estimate is near the prespecified 25% threshold, replicates across two independent task batches, but uncertainty includes materially lower values and the intervention is a peer rewrite rather than an OPD update",
+  "mismatch_sensitivity": {
+    "after_exclusion": {
+      "mixed_actions": 54,
+      "rate": 0.2523364485981308,
+      "target_actions": 214,
+      "task_group_clusters": 35,
+      "wilson_95": [
+        0.19885926503336981,
+        0.3145483270115912
+      ]
+    },
+    "excluded_groups": [
+      {
+        "seed": "seed1",
+        "task_id": "task_0023"
+      },
+      {
+        "seed": "seed2",
+        "task_id": "task_1524"
+      },
+      {
+        "seed": "seed2",
+        "task_id": "task_1688"
+      }
+    ]
+  },
+  "per_seed": {
+    "seed1": {
+      "baseline_checks_ok": 254,
+      "baseline_checks_stable": 254,
+      "baseline_sidecar_matches": 253,
+      "mixed_actions": 25,
+      "rate": 0.2631578947368421,
+      "rollouts": 254,
+      "run_dir": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000",
+      "target_actions": 95,
+      "task_group_clusters": 17,
+      "task_groups": 32,
+      "wilson_95": [
+        0.1850652476987089,
+        0.35966020924104136
+      ]
+    },
+    "seed2": {
+      "baseline_checks_ok": 235,
+      "baseline_checks_stable": 235,
+      "baseline_sidecar_matches": 233,
+      "mixed_actions": 29,
+      "rate": 0.24369747899159663,
+      "rollouts": 236,
+      "run_dir": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443",
+      "target_actions": 119,
+      "task_group_clusters": 18,
+      "task_groups": 32,
+      "wilson_95": [
+        0.1753718511412103,
+        0.3280531278063385
+      ]
+    }
+  },
+  "qualitative_examples": [
+    {
+      "agent_steps": 7,
+      "artifact": "output/revised_templates/family_checkin.md",
+      "factor_count": 25,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-159.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 269,
+              "content_sha256": "0b78762a599f977865332414c76b71527e193d44e9df72d0f8546136a421349d",
+              "line": 230,
+              "task_index": 152
+            }
+          ],
+          "donor_task_indices": [
+            152
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed",
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 275,
+              "content_sha256": "746e90a8814f46baa53c5245d6b061eb138d1a8dd6598c53714e26c9be40659b",
+              "line": 157,
+              "task_index": 153
+            }
+          ],
+          "donor_task_indices": [
+            153
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed",
+            "family_signature_appended"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed",
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 294,
+              "content_sha256": "7928bc4c45db2ec4111a91d289378dcde2dba0f36f3f85ce991dd0404ddb4137",
+              "line": 255,
+              "task_index": 155
+            }
+          ],
+          "donor_task_indices": [
+            155
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed",
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 296,
+              "content_sha256": "9a8edd3b9d2020ed1a7a2bab3b1c0a1cb1126c6107906d179597c14242182390",
+              "line": 163,
+              "task_index": 156
+            }
+          ],
+          "donor_task_indices": [
+            156
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed",
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 297,
+              "content_sha256": "c06996156d6dc0004aff2c4c0abe055f78965ee91fef926f78715538ec0362d8",
+              "line": 159,
+              "task_index": 158
+            }
+          ],
+          "donor_task_indices": [
+            158
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ]
+        },
+        {
+          "corrections": [
+            "family_variable_renames_correct"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 271,
+              "content_sha256": "e89c89c081a1908f633d98b42caf77502ab8f418bc5e9f255553ad46040ef294",
+              "line": 156,
+              "task_index": 154
+            }
+          ],
+          "donor_task_indices": [
+            154
+          ],
+          "regressions": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ]
+        }
+      ],
+      "recipient_task_index": 159,
+      "seed": "seed2",
+      "target_write_line": 159,
+      "task_id": "task_1030"
+    },
+    {
+      "agent_steps": 6,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-139.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8015,
+              "content_sha256": "18c4a79edffdc093a560752eae993fc8d9cea01a4d3480251f2277ea2789914b",
+              "line": 381,
+              "task_index": 140
+            }
+          ],
+          "donor_task_indices": [
+            140
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_005_auth"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7102,
+              "content_sha256": "3420a10629a2caa423fa29204e1adadb9f67c5b97e24957b15f86c791331896d",
+              "line": 307,
+              "task_index": 141
+            }
+          ],
+          "donor_task_indices": [
+            141
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7747,
+              "content_sha256": "53e6d34de9d988ffd564feaa08219dfcaafb252803911832b042c88cda1dd52e",
+              "line": 370,
+              "task_index": 136
+            }
+          ],
+          "donor_task_indices": [
+            136
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8431,
+              "content_sha256": "a822b4ce0067bcafaab0ad27ab6a0c75167ce1d48838366a40713ce029cd8649",
+              "line": 255,
+              "task_index": 138
+            }
+          ],
+          "donor_task_indices": [
+            138
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7304,
+              "content_sha256": "d83abce1ad6fcb2d89591dfc723e935da38a0a33bd4fc1982cb2d321e670f488",
+              "line": 260,
+              "task_index": 142
+            }
+          ],
+          "donor_task_indices": [
+            142
+          ],
+          "regressions": [
+            "has_SEC_002_db",
+            "has_SEC_004_auth_or_frontend"
+          ]
+        }
+      ],
+      "recipient_task_index": 139,
+      "seed": "seed2",
+      "target_write_line": 258,
+      "task_id": "task_1864"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/decisions/decision_log.md",
+      "factor_count": 31,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-91.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "decisions_contains_irreversible_heading"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2228,
+              "content_sha256": "3e3ef7875ec2df852acaeb9de0dab94b6a584310d9dd9596e0cd1c21e743d5bf",
+              "line": 356,
+              "task_index": 93
+            }
+          ],
+          "donor_task_indices": [
+            93
+          ],
+          "regressions": [
+            "decisions_at_least_3_bullets",
+            "decisions_owners_at_least_2"
+          ]
+        },
+        {
+          "corrections": [
+            "decisions_contains_irreversible_heading"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2171,
+              "content_sha256": "45486e8e26bd49c769fd9bef44516638ff411b2434a710727cf02b5ae90f2223",
+              "line": 359,
+              "task_index": 92
+            }
+          ],
+          "donor_task_indices": [
+            92
+          ],
+          "regressions": [
+            "decisions_at_least_3_bullets",
+            "decisions_owners_at_least_2"
+          ]
+        },
+        {
+          "corrections": [
+            "decisions_contains_irreversible_heading"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3223,
+              "content_sha256": "d415c7c51dcafad232cd346dd83ce940524a021e8e4f0534f67a9ebb0c9313a0",
+              "line": 363,
+              "task_index": 94
+            }
+          ],
+          "donor_task_indices": [
+            94
+          ],
+          "regressions": [
+            "decisions_owners_at_least_2"
+          ]
+        },
+        {
+          "corrections": [
+            "decisions_contains_irreversible_heading"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2900,
+              "content_sha256": "dc0196be42307a03846c317310bb4f733db28b3bc3da7fb798f0eb2b4e28c746",
+              "line": 363,
+              "task_index": 89
+            }
+          ],
+          "donor_task_indices": [
+            89
+          ],
+          "regressions": [
+            "decisions_at_least_3_bullets",
+            "decisions_owners_at_least_2"
+          ]
+        }
+      ],
+      "recipient_task_index": 91,
+      "seed": "seed1",
+      "target_write_line": 376,
+      "task_id": "task_1862"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-143.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8015,
+              "content_sha256": "18c4a79edffdc093a560752eae993fc8d9cea01a4d3480251f2277ea2789914b",
+              "line": 381,
+              "task_index": 140
+            }
+          ],
+          "donor_task_indices": [
+            140
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7747,
+              "content_sha256": "53e6d34de9d988ffd564feaa08219dfcaafb252803911832b042c88cda1dd52e",
+              "line": 370,
+              "task_index": 136
+            }
+          ],
+          "donor_task_indices": [
+            136
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8431,
+              "content_sha256": "a822b4ce0067bcafaab0ad27ab6a0c75167ce1d48838366a40713ce029cd8649",
+              "line": 255,
+              "task_index": 138
+            }
+          ],
+          "donor_task_indices": [
+            138
+          ],
+          "regressions": [
+            "has_SEC_004_auth_or_frontend"
+          ]
+        },
+        {
+          "corrections": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7304,
+              "content_sha256": "d83abce1ad6fcb2d89591dfc723e935da38a0a33bd4fc1982cb2d321e670f488",
+              "line": 260,
+              "task_index": 142
+            }
+          ],
+          "donor_task_indices": [
+            142
+          ],
+          "regressions": [
+            "has_SEC_002_db",
+            "has_SEC_004_auth_or_frontend"
+          ]
+        }
+      ],
+      "recipient_task_index": 143,
+      "seed": "seed2",
+      "target_write_line": 345,
+      "task_id": "task_1864"
+    },
+    {
+      "agent_steps": 4,
+      "artifact": "output/message_to_artist.txt",
+      "factor_count": 26,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-66.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 907,
+              "content_sha256": "0369635b006c0bc45d2131ed0a900dd60196d36b5404b6edebc4ea1c55d1d454",
+              "line": 225,
+              "task_index": 67
+            }
+          ],
+          "donor_task_indices": [
+            67
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        },
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 801,
+              "content_sha256": "19d13605ef9f38d7758a9249d38fdbb516de5365c0a5f697b7e8045cde34efaf",
+              "line": 215,
+              "task_index": 70
+            }
+          ],
+          "donor_task_indices": [
+            70
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        },
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 864,
+              "content_sha256": "380b108de7d5942aba5e8106ba98626564259e162995c0a2b4df686d1a26edf1",
+              "line": 255,
+              "task_index": 64
+            }
+          ],
+          "donor_task_indices": [
+            64
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        }
+      ],
+      "recipient_task_index": 66,
+      "seed": "seed1",
+      "target_write_line": 168,
+      "task_id": "task_0255"
+    },
+    {
+      "agent_steps": 4,
+      "artifact": "output/message_to_artist.txt",
+      "factor_count": 26,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-68.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 907,
+              "content_sha256": "0369635b006c0bc45d2131ed0a900dd60196d36b5404b6edebc4ea1c55d1d454",
+              "line": 225,
+              "task_index": 67
+            }
+          ],
+          "donor_task_indices": [
+            67
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        },
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 801,
+              "content_sha256": "19d13605ef9f38d7758a9249d38fdbb516de5365c0a5f697b7e8045cde34efaf",
+              "line": 215,
+              "task_index": 70
+            }
+          ],
+          "donor_task_indices": [
+            70
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        },
+        {
+          "corrections": [
+            "message_mentions_both_albedo_paths"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 864,
+              "content_sha256": "380b108de7d5942aba5e8106ba98626564259e162995c0a2b4df686d1a26edf1",
+              "line": 255,
+              "task_index": 64
+            }
+          ],
+          "donor_task_indices": [
+            64
+          ],
+          "regressions": [
+            "message_has_3_to_5_bullets"
+          ]
+        }
+      ],
+      "recipient_task_index": 68,
+      "seed": "seed1",
+      "target_write_line": 199,
+      "task_id": "task_0255"
+    },
+    {
+      "agent_steps": 9,
+      "artifact": "output/rewritten_messages.csv",
+      "factor_count": 9,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-134.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "rewritten_messages_content_constraints_sms"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2161,
+              "content_sha256": "57af63f63ed5b4fba73c02c5e9ede4f3fe9b27ba1351dc40aa63879fc40a4be9",
+              "line": 268,
+              "task_index": 130
+            }
+          ],
+          "donor_task_indices": [
+            130
+          ],
+          "regressions": [
+            "content_calendar_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "rewritten_messages_content_constraints_sms"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2152,
+              "content_sha256": "8fc768277ee5ea0cb6d04cbb9278a78d916d243fb5299a63834893f5e2a1f456",
+              "line": 185,
+              "task_index": 131
+            }
+          ],
+          "donor_task_indices": [
+            131
+          ],
+          "regressions": [
+            "content_calendar_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "rewritten_messages_content_constraints_sms"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2240,
+              "content_sha256": "f68e814fac62c4afef49a3329b7806c1e0402880a866e3d28410c4f8e02a4ea0",
+              "line": 160,
+              "task_index": 135
+            }
+          ],
+          "donor_task_indices": [
+            135
+          ],
+          "regressions": [
+            "content_calendar_correct"
+          ]
+        }
+      ],
+      "recipient_task_index": 134,
+      "seed": "seed1",
+      "target_write_line": 269,
+      "task_id": "task_1555"
+    },
+    {
+      "agent_steps": 5,
+      "artifact": "output/revised_templates/family_checkin.md",
+      "factor_count": 25,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-153.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "family_signature_appended"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 269,
+              "content_sha256": "0b78762a599f977865332414c76b71527e193d44e9df72d0f8546136a421349d",
+              "line": 230,
+              "task_index": 152
+            }
+          ],
+          "donor_task_indices": [
+            152
+          ],
+          "regressions": [
+            "family_duplicate_signoffs_removed"
+          ]
+        },
+        {
+          "corrections": [
+            "family_lunch_placeholder_and_plaintext_removed",
+            "family_signature_appended"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 310,
+              "content_sha256": "549cc797c73bf2bcea7f983e50f3122726f3534825a217f5fcd75cff09ab5276",
+              "line": 159,
+              "task_index": 159
+            }
+          ],
+          "donor_task_indices": [
+            159
+          ],
+          "regressions": [
+            "family_duplicate_signoffs_removed",
+            "family_variable_renames_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "family_signature_appended"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 271,
+              "content_sha256": "e89c89c081a1908f633d98b42caf77502ab8f418bc5e9f255553ad46040ef294",
+              "line": 156,
+              "task_index": 154
+            }
+          ],
+          "donor_task_indices": [
+            154
+          ],
+          "regressions": [
+            "family_duplicate_signoffs_removed"
+          ]
+        }
+      ],
+      "recipient_task_index": 153,
+      "seed": "seed2",
+      "target_write_line": 157,
+      "task_id": "task_1030"
+    },
+    {
+      "agent_steps": 4,
+      "artifact": "output/setup_guide.md",
+      "factor_count": 18,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-127.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "no_secret_leak_setup_guide"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3128,
+              "content_sha256": "1f26bd1effab057d842a3c8a2facc3615494a7cb2e64550e66a5c8411e21d229",
+              "line": 104,
+              "task_index": 124
+            }
+          ],
+          "donor_task_indices": [
+            124
+          ],
+          "regressions": [
+            "safety_rules_5plus"
+          ]
+        },
+        {
+          "corrections": [
+            "no_secret_leak_setup_guide"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3202,
+              "content_sha256": "319652d8655162eeaa3c3a5830ac3c6e019656c1fb4b687af032ecb78386cce2",
+              "line": 104,
+              "task_index": 125
+            }
+          ],
+          "donor_task_indices": [
+            125
+          ],
+          "regressions": [
+            "safety_rules_5plus"
+          ]
+        },
+        {
+          "corrections": [
+            "no_secret_leak_setup_guide"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3851,
+              "content_sha256": "d97e78bdb1e17b05c6508a488ed325895337242535cc30860b858a8064142cbc",
+              "line": 134,
+              "task_index": 121
+            }
+          ],
+          "donor_task_indices": [
+            121
+          ],
+          "regressions": [
+            "safety_rules_5plus"
+          ]
+        }
+      ],
+      "recipient_task_index": 127,
+      "seed": "seed2",
+      "target_write_line": 109,
+      "task_id": "task_1839"
+    },
+    {
+      "agent_steps": 6,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-142.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "has_SEC_002_db"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7102,
+              "content_sha256": "3420a10629a2caa423fa29204e1adadb9f67c5b97e24957b15f86c791331896d",
+              "line": 307,
+              "task_index": 141
+            }
+          ],
+          "donor_task_indices": [
+            141
+          ],
+          "regressions": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_002_db",
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7450,
+              "content_sha256": "7b7117026a46890ea45f43a2ec0f8df8d520227a5ec3392ec1c9a8149f677c63",
+              "line": 345,
+              "task_index": 143
+            }
+          ],
+          "donor_task_indices": [
+            143
+          ],
+          "regressions": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_002_db",
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8607,
+              "content_sha256": "e8bb1c6619ea7498f1ca624088773aa6b4bff2e23fdcd101ba6d1f55e841c35c",
+              "line": 258,
+              "task_index": 139
+            }
+          ],
+          "donor_task_indices": [
+            139
+          ],
+          "regressions": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        }
+      ],
+      "recipient_task_index": 142,
+      "seed": "seed2",
+      "target_write_line": 260,
+      "task_id": "task_1864"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/message_to_artist.txt",
+      "factor_count": 26,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-64.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 596,
+              "content_sha256": "15d95c6b41f45f221cf84a1f30f8b07e179fffdc5612d994f3771322482876bf",
+              "line": 168,
+              "task_index": 66
+            }
+          ],
+          "donor_task_indices": [
+            66
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        },
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 706,
+              "content_sha256": "a518bc2372abf615821ee38362412155eb74cca0b2728941fc020ea94270c47b",
+              "line": 199,
+              "task_index": 68
+            }
+          ],
+          "donor_task_indices": [
+            68
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        }
+      ],
+      "recipient_task_index": 64,
+      "seed": "seed1",
+      "target_write_line": 255,
+      "task_id": "task_0255"
+    },
+    {
+      "agent_steps": 9,
+      "artifact": "output/message_to_artist.txt",
+      "factor_count": 26,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-67.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 596,
+              "content_sha256": "15d95c6b41f45f221cf84a1f30f8b07e179fffdc5612d994f3771322482876bf",
+              "line": 168,
+              "task_index": 66
+            }
+          ],
+          "donor_task_indices": [
+            66
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        },
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 706,
+              "content_sha256": "a518bc2372abf615821ee38362412155eb74cca0b2728941fc020ea94270c47b",
+              "line": 199,
+              "task_index": 68
+            }
+          ],
+          "donor_task_indices": [
+            68
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        }
+      ],
+      "recipient_task_index": 67,
+      "seed": "seed1",
+      "target_write_line": 225,
+      "task_id": "task_0255"
+    },
+    {
+      "agent_steps": 4,
+      "artifact": "output/message_to_artist.txt",
+      "factor_count": 26,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-70.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 596,
+              "content_sha256": "15d95c6b41f45f221cf84a1f30f8b07e179fffdc5612d994f3771322482876bf",
+              "line": 168,
+              "task_index": 66
+            }
+          ],
+          "donor_task_indices": [
+            66
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        },
+        {
+          "corrections": [
+            "message_has_3_to_5_bullets"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 706,
+              "content_sha256": "a518bc2372abf615821ee38362412155eb74cca0b2728941fc020ea94270c47b",
+              "line": 199,
+              "task_index": 68
+            }
+          ],
+          "donor_task_indices": [
+            68
+          ],
+          "regressions": [
+            "message_mentions_both_albedo_paths"
+          ]
+        }
+      ],
+      "recipient_task_index": 70,
+      "seed": "seed1",
+      "target_write_line": 215,
+      "task_id": "task_0255"
+    },
+    {
+      "agent_steps": 19,
+      "artifact": "output/posts/posts.json",
+      "factor_count": 13,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-142.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "hashtags_derived_and_unique"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3582,
+              "content_sha256": "56da736616b0befc5b64395a06096a6c1f3536ba2b0b44bcf89aeafd4d0ffba5",
+              "line": 262,
+              "task_index": 139
+            }
+          ],
+          "donor_task_indices": [
+            139
+          ],
+          "regressions": [
+            "media_file_and_alt_text_requirements"
+          ]
+        },
+        {
+          "corrections": [
+            "hashtags_derived_and_unique"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3078,
+              "content_sha256": "6cca4fbc30144e1781e90e8d53249c11049fd1e510fa902f3958a06dd40559ed",
+              "line": 303,
+              "task_index": 141
+            }
+          ],
+          "donor_task_indices": [
+            141
+          ],
+          "regressions": [
+            "media_file_and_alt_text_requirements"
+          ]
+        }
+      ],
+      "recipient_task_index": 142,
+      "seed": "seed1",
+      "target_write_line": 165,
+      "task_id": "task_0357"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/launch_plan.md",
+      "factor_count": 19,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-13.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "launch_plan_phase_count"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 5648,
+              "content_sha256": "0c427a0ab53102bea08c8fe6c55801594b5a5402e4f6392f6574a50326d4166e",
+              "line": 289,
+              "task_index": 9
+            }
+          ],
+          "donor_task_indices": [
+            9
+          ],
+          "regressions": [
+            "launch_plan_launch_day"
+          ]
+        },
+        {
+          "corrections": [
+            "launch_plan_phase_count"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3048,
+              "content_sha256": "5f881867cb537507fe9a96db4bded0ecae06792f876d317e46f87b62d700e5bb",
+              "line": 293,
+              "task_index": 12
+            }
+          ],
+          "donor_task_indices": [
+            12
+          ],
+          "regressions": [
+            "launch_plan_launch_day"
+          ]
+        }
+      ],
+      "recipient_task_index": 13,
+      "seed": "seed1",
+      "target_write_line": 242,
+      "task_id": "task_1075"
+    },
+    {
+      "agent_steps": 8,
+      "artifact": "output/readiness.json",
+      "factor_count": 19,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-14.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "readiness_blockers_match"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 396,
+              "content_sha256": "4ec138d792af174d2d40bca668c54a8adba25f53e677bd9076f0a7b807620abe",
+              "line": 267,
+              "task_index": 11
+            }
+          ],
+          "donor_task_indices": [
+            11
+          ],
+          "regressions": [
+            "readiness_launch_decision_match",
+            "readiness_scores_match"
+          ]
+        },
+        {
+          "corrections": [
+            "readiness_blockers_match"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2960,
+              "content_sha256": "996ee4eea761984e1a79f5efdf39e32907a25daf1f7c4bf3bd4939c045257ccc",
+              "line": 298,
+              "task_index": 12
+            }
+          ],
+          "donor_task_indices": [
+            12
+          ],
+          "regressions": [
+            "readiness_launch_decision_match",
+            "readiness_scores_match"
+          ]
+        }
+      ],
+      "recipient_task_index": 14,
+      "seed": "seed1",
+      "target_write_line": 371,
+      "task_id": "task_1075"
+    },
+    {
+      "agent_steps": 8,
+      "artifact": "output/rewritten_messages.csv",
+      "factor_count": 9,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-132.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "rewritten_messages_content_constraints_sms"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2152,
+              "content_sha256": "8fc768277ee5ea0cb6d04cbb9278a78d916d243fb5299a63834893f5e2a1f456",
+              "line": 185,
+              "task_index": 131
+            }
+          ],
+          "donor_task_indices": [
+            131
+          ],
+          "regressions": [
+            "content_calendar_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "rewritten_messages_content_constraints_sms"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2240,
+              "content_sha256": "f68e814fac62c4afef49a3329b7806c1e0402880a866e3d28410c4f8e02a4ea0",
+              "line": 160,
+              "task_index": 135
+            }
+          ],
+          "donor_task_indices": [
+            135
+          ],
+          "regressions": [
+            "content_calendar_correct"
+          ]
+        }
+      ],
+      "recipient_task_index": 132,
+      "seed": "seed1",
+      "target_write_line": 261,
+      "task_id": "task_1555"
+    },
+    {
+      "agent_steps": 9,
+      "artifact": "output/strategy/diagnosis.json",
+      "factor_count": 31,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-88.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "diagnosis_decision_routing_items_valid"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 4128,
+              "content_sha256": "1634bf094bc4767d23b75c9b14cc2b1479376a88c106ec9d317d153caa475fe4",
+              "line": 341,
+              "task_index": 93
+            }
+          ],
+          "donor_task_indices": [
+            93
+          ],
+          "regressions": [
+            "diagnosis_computed_metrics_numbers"
+          ]
+        },
+        {
+          "corrections": [
+            "diagnosis_decision_routing_items_valid"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 4200,
+              "content_sha256": "263bec1eba17dfbf5a3395d9bc0b6e9a6cbc23d5a610e75e94f82d01778dd071",
+              "line": 361,
+              "task_index": 91
+            }
+          ],
+          "donor_task_indices": [
+            91
+          ],
+          "regressions": [
+            "diagnosis_computed_metrics_numbers"
+          ]
+        }
+      ],
+      "recipient_task_index": 88,
+      "seed": "seed1",
+      "target_write_line": 423,
+      "task_id": "task_1862"
+    },
+    {
+      "agent_steps": 10,
+      "artifact": "output/strategy/diagnosis.json",
+      "factor_count": 31,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-90.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "diagnosis_decision_routing_items_valid"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 4128,
+              "content_sha256": "1634bf094bc4767d23b75c9b14cc2b1479376a88c106ec9d317d153caa475fe4",
+              "line": 341,
+              "task_index": 93
+            }
+          ],
+          "donor_task_indices": [
+            93
+          ],
+          "regressions": [
+            "diagnosis_computed_metrics_numbers"
+          ]
+        },
+        {
+          "corrections": [
+            "diagnosis_decision_routing_items_valid"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 4200,
+              "content_sha256": "263bec1eba17dfbf5a3395d9bc0b6e9a6cbc23d5a610e75e94f82d01778dd071",
+              "line": 361,
+              "task_index": 91
+            }
+          ],
+          "donor_task_indices": [
+            91
+          ],
+          "regressions": [
+            "diagnosis_computed_metrics_numbers"
+          ]
+        }
+      ],
+      "recipient_task_index": 90,
+      "seed": "seed1",
+      "target_write_line": 426,
+      "task_id": "task_1862"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/strategy/diagnosis.json",
+      "factor_count": 31,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-91.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "diagnosis_computed_metrics_numbers"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2627,
+              "content_sha256": "5d131280dca2d4fa3b6c10aeaa586d40c90bad71b365d9dc4e5073701a186739",
+              "line": 423,
+              "task_index": 88
+            }
+          ],
+          "donor_task_indices": [
+            88
+          ],
+          "regressions": [
+            "diagnosis_decision_routing_items_valid"
+          ]
+        },
+        {
+          "corrections": [
+            "diagnosis_computed_metrics_numbers"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3303,
+              "content_sha256": "7bd98aa35d7eecd3e09c1f2708f2a9f8bd9993ebcfc997a939ddefdbff078ec5",
+              "line": 426,
+              "task_index": 90
+            }
+          ],
+          "donor_task_indices": [
+            90
+          ],
+          "regressions": [
+            "diagnosis_decision_routing_items_valid"
+          ]
+        }
+      ],
+      "recipient_task_index": 91,
+      "seed": "seed1",
+      "target_write_line": 361,
+      "task_id": "task_1862"
+    },
+    {
+      "agent_steps": 6,
+      "artifact": "output/strategy/diagnosis.json",
+      "factor_count": 31,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-phase0-32x8-seed1-20260822-023000/gate/openclaw_logs/rollout_0/instance-gate-93.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "diagnosis_computed_metrics_numbers"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 2627,
+              "content_sha256": "5d131280dca2d4fa3b6c10aeaa586d40c90bad71b365d9dc4e5073701a186739",
+              "line": 423,
+              "task_index": 88
+            }
+          ],
+          "donor_task_indices": [
+            88
+          ],
+          "regressions": [
+            "diagnosis_decision_routing_items_valid"
+          ]
+        },
+        {
+          "corrections": [
+            "diagnosis_computed_metrics_numbers"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 3303,
+              "content_sha256": "7bd98aa35d7eecd3e09c1f2708f2a9f8bd9993ebcfc997a939ddefdbff078ec5",
+              "line": 426,
+              "task_index": 90
+            }
+          ],
+          "donor_task_indices": [
+            90
+          ],
+          "regressions": [
+            "diagnosis_decision_routing_items_valid"
+          ]
+        }
+      ],
+      "recipient_task_index": 93,
+      "seed": "seed1",
+      "target_write_line": 341,
+      "task_id": "task_1862"
+    },
+    {
+      "agent_steps": 9,
+      "artifact": "output/skills_catalog.json",
+      "factor_count": 16,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-170.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8701,
+              "content_sha256": "31cd05b264535fa46605ce782444b2b5a63a97f38a34c104be9e38aefd7af69f",
+              "line": 341,
+              "task_index": 175
+            }
+          ],
+          "donor_task_indices": [
+            175
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        },
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8157,
+              "content_sha256": "c5fe349294b1a51d7c553318af69ecbf8349d82acda6260d95162306f470250a",
+              "line": 336,
+              "task_index": 171
+            }
+          ],
+          "donor_task_indices": [
+            171
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        }
+      ],
+      "recipient_task_index": 170,
+      "seed": "seed2",
+      "target_write_line": 424,
+      "task_id": "task_0713"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/skills_catalog.json",
+      "factor_count": 16,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-172.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8701,
+              "content_sha256": "31cd05b264535fa46605ce782444b2b5a63a97f38a34c104be9e38aefd7af69f",
+              "line": 341,
+              "task_index": 175
+            }
+          ],
+          "donor_task_indices": [
+            175
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        },
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8157,
+              "content_sha256": "c5fe349294b1a51d7c553318af69ecbf8349d82acda6260d95162306f470250a",
+              "line": 336,
+              "task_index": 171
+            }
+          ],
+          "donor_task_indices": [
+            171
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        }
+      ],
+      "recipient_task_index": 172,
+      "seed": "seed2",
+      "target_write_line": 341,
+      "task_id": "task_0713"
+    },
+    {
+      "agent_steps": 9,
+      "artifact": "output/skills_catalog.json",
+      "factor_count": 16,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-173.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8701,
+              "content_sha256": "31cd05b264535fa46605ce782444b2b5a63a97f38a34c104be9e38aefd7af69f",
+              "line": 341,
+              "task_index": 175
+            }
+          ],
+          "donor_task_indices": [
+            175
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        },
+        {
+          "corrections": [
+            "coverage_official_partner_present"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8157,
+              "content_sha256": "c5fe349294b1a51d7c553318af69ecbf8349d82acda6260d95162306f470250a",
+              "line": 336,
+              "task_index": 171
+            }
+          ],
+          "donor_task_indices": [
+            171
+          ],
+          "regressions": [
+            "all_catalog_skills_in_phases"
+          ]
+        }
+      ],
+      "recipient_task_index": 173,
+      "seed": "seed2",
+      "target_write_line": 485,
+      "task_id": "task_0713"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/revised_templates/family_checkin.md",
+      "factor_count": 25,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-152.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 310,
+              "content_sha256": "549cc797c73bf2bcea7f983e50f3122726f3534825a217f5fcd75cff09ab5276",
+              "line": 159,
+              "task_index": 159
+            }
+          ],
+          "donor_task_indices": [
+            159
+          ],
+          "regressions": [
+            "family_variable_renames_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 275,
+              "content_sha256": "746e90a8814f46baa53c5245d6b061eb138d1a8dd6598c53714e26c9be40659b",
+              "line": 157,
+              "task_index": 153
+            }
+          ],
+          "donor_task_indices": [
+            153
+          ],
+          "regressions": [
+            "family_signature_appended"
+          ]
+        }
+      ],
+      "recipient_task_index": 152,
+      "seed": "seed2",
+      "target_write_line": 230,
+      "task_id": "task_1030"
+    },
+    {
+      "agent_steps": 6,
+      "artifact": "output/revised_templates/family_checkin.md",
+      "factor_count": 25,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-154.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "family_lunch_placeholder_and_plaintext_removed"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 310,
+              "content_sha256": "549cc797c73bf2bcea7f983e50f3122726f3534825a217f5fcd75cff09ab5276",
+              "line": 159,
+              "task_index": 159
+            }
+          ],
+          "donor_task_indices": [
+            159
+          ],
+          "regressions": [
+            "family_variable_renames_correct"
+          ]
+        },
+        {
+          "corrections": [
+            "family_duplicate_signoffs_removed"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 275,
+              "content_sha256": "746e90a8814f46baa53c5245d6b061eb138d1a8dd6598c53714e26c9be40659b",
+              "line": 157,
+              "task_index": 153
+            }
+          ],
+          "donor_task_indices": [
+            153
+          ],
+          "regressions": [
+            "family_signature_appended"
+          ]
+        }
+      ],
+      "recipient_task_index": 154,
+      "seed": "seed2",
+      "target_write_line": 156,
+      "task_id": "task_1030"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/report.json",
+      "factor_count": 25,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-155.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "report_variables_found_match_shipper"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 1696,
+              "content_sha256": "6459a3028021582317009396131b6c9625d605cef6070c4314348a71bd3f4fb0",
+              "line": 162,
+              "task_index": 154
+            }
+          ],
+          "donor_task_indices": [
+            154
+          ],
+          "regressions": [
+            "report_variables_found_match_family"
+          ]
+        },
+        {
+          "corrections": [
+            "report_variables_found_match_shipper"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 1721,
+              "content_sha256": "85d060658b4639bdb508131c9127e7606a21aa5ceee663b30effc4c6ebebfea2",
+              "line": 164,
+              "task_index": 159
+            }
+          ],
+          "donor_task_indices": [
+            159
+          ],
+          "regressions": [
+            "report_variables_found_match_family"
+          ]
+        }
+      ],
+      "recipient_task_index": 155,
+      "seed": "seed2",
+      "target_write_line": 377,
+      "task_id": "task_1030"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-136.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7450,
+              "content_sha256": "7b7117026a46890ea45f43a2ec0f8df8d520227a5ec3392ec1c9a8149f677c63",
+              "line": 345,
+              "task_index": 143
+            }
+          ],
+          "donor_task_indices": [
+            143
+          ],
+          "regressions": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8607,
+              "content_sha256": "e8bb1c6619ea7498f1ca624088773aa6b4bff2e23fdcd101ba6d1f55e841c35c",
+              "line": 258,
+              "task_index": 139
+            }
+          ],
+          "donor_task_indices": [
+            139
+          ],
+          "regressions": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        }
+      ],
+      "recipient_task_index": 136,
+      "seed": "seed2",
+      "target_write_line": 370,
+      "task_id": "task_1864"
+    },
+    {
+      "agent_steps": 5,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-138.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7450,
+              "content_sha256": "7b7117026a46890ea45f43a2ec0f8df8d520227a5ec3392ec1c9a8149f677c63",
+              "line": 345,
+              "task_index": 143
+            }
+          ],
+          "donor_task_indices": [
+            143
+          ],
+          "regressions": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8607,
+              "content_sha256": "e8bb1c6619ea7498f1ca624088773aa6b4bff2e23fdcd101ba6d1f55e841c35c",
+              "line": 258,
+              "task_index": 139
+            }
+          ],
+          "donor_task_indices": [
+            139
+          ],
+          "regressions": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        }
+      ],
+      "recipient_task_index": 138,
+      "seed": "seed2",
+      "target_write_line": 255,
+      "task_id": "task_1864"
+    },
+    {
+      "agent_steps": 7,
+      "artifact": "output/review-checklist.json",
+      "factor_count": 27,
+      "instance_log": "/root/openclaw-rl-local/outputs/mosaic-p2-provenance-32x8-seed2-20260823-031443/gate/openclaw_logs/rollout_0/instance-gate-140.log",
+      "mixed_examples": [
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 7450,
+              "content_sha256": "7b7117026a46890ea45f43a2ec0f8df8d520227a5ec3392ec1c9a8149f677c63",
+              "line": 345,
+              "task_index": 143
+            }
+          ],
+          "donor_task_indices": [
+            143
+          ],
+          "regressions": [
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        },
+        {
+          "corrections": [
+            "has_SEC_004_auth_or_frontend"
+          ],
+          "donor_exact_writes": [
+            {
+              "content_bytes": 8607,
+              "content_sha256": "e8bb1c6619ea7498f1ca624088773aa6b4bff2e23fdcd101ba6d1f55e841c35c",
+              "line": 258,
+              "task_index": 139
+            }
+          ],
+          "donor_task_indices": [
+            139
+          ],
+          "regressions": [
+            "has_SEC_005_auth",
+            "summary_category_counts",
+            "summary_severity_counts"
+          ]
+        }
+      ],
+      "recipient_task_index": 140,
+      "seed": "seed2",
+      "target_write_line": 381,
+      "task_id": "task_1864"
+    }
+  ],
+  "schema_version": 1,
+  "unit": "A recipient's byte-exact single-write action, counted once. It is failure-relevant if at least one same-checkpoint peer's byte-exact write version fixes a failed factor. It is mixed if any such replacement also regresses a passed factor."
+}

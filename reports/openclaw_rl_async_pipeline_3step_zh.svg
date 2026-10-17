@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900">
+  <defs>
+    <style>
+      text { font-family: "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; fill: #10233f; }
+      .title { font-size: 46px; font-weight: 700; fill: white; }
+      .subtitle { font-size: 24px; font-weight: 600; }
+      .axis { font-size: 19px; font-weight: 600; }
+      .lane { font-size: 25px; font-weight: 700; fill: white; }
+      .block { font-size: 23px; font-weight: 700; }
+      .small { font-size: 17px; font-weight: 600; }
+      .legend { font-size: 18px; font-weight: 600; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#10233f"/>
+    </marker>
+  </defs>
+
+  <rect width="1800" height="900" fill="#f8fbff"/>
+  <rect x="185" y="28" width="1430" height="76" rx="18" fill="#0757bd"/>
+  <text x="900" y="80" text-anchor="middle" class="title">OpenClaw RL：三步异步流水线</text>
+  <text x="900" y="137" text-anchor="middle" class="subtitle">4 张推理卡与 4 张训练卡并行；稳态每阶段约 18.2 分钟</text>
+
+  <!-- Exact scale: 24 px/min. Rollout=18 min=432 px; sync=0.2 min=4.8 px. -->
+  <text x="52" y="202" class="axis">相对时间（分钟）</text>
+  <line x1="250" y1="196" x2="1570" y2="196" stroke="#10233f" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Major and synchronization ticks: 0, 18, 18.2, 36.2, 36.4, 54.4 -->
+  <g stroke="#54708f" stroke-width="2">
+    <line x1="250" y1="185" x2="250" y2="690"/>
+    <line x1="682" y1="185" x2="682" y2="690"/>
+    <line x1="686.8" y1="185" x2="686.8" y2="690" stroke="#f26b21" stroke-width="5"/>
+    <line x1="1118.8" y1="185" x2="1118.8" y2="690"/>
+    <line x1="1123.6" y1="185" x2="1123.6" y2="690" stroke="#f26b21" stroke-width="5"/>
+    <line x1="1555.6" y1="185" x2="1555.6" y2="690"/>
+  </g>
+  <g class="axis" text-anchor="middle">
+    <text x="250" y="178">0</text>
+    <text x="682" y="178">18.0</text>
+    <text x="686.8" y="229" fill="#f26b21">18.2</text>
+    <text x="1118.8" y="178">36.2</text>
+    <text x="1123.6" y="229" fill="#f26b21">36.4</text>
+    <text x="1555.6" y="178">54.4</text>
+  </g>
+
+  <!-- Lane labels -->
+  <rect x="42" y="275" width="175" height="160" rx="15" fill="#0877df"/>
+  <text x="129" y="338" text-anchor="middle" class="lane">推理</text>
+  <text x="129" y="382" text-anchor="middle" class="lane">GPU 4–7</text>
+  <rect x="42" y="500" width="175" height="160" rx="15" fill="#07913a"/>
+  <text x="129" y="563" text-anchor="middle" class="lane">训练</text>
+  <text x="129" y="607" text-anchor="middle" class="lane">GPU 0–3</text>
+
+  <!-- Inference: three exactly equal 18-minute blocks -->
+  <g>
+    <rect x="250" y="275" width="432" height="160" rx="12" fill="#1682ed"/>
+    <rect x="686.8" y="275" width="432" height="160" rx="12" fill="#1682ed"/>
+    <rect x="1123.6" y="275" width="432" height="160" rx="12" fill="#1682ed"/>
+    <g class="block" text-anchor="middle" fill="white">
+      <text x="466" y="340" fill="white">Rollout 1（θ0）</text><text x="466" y="380" fill="white">约 18.0 分钟</text>
+      <text x="902.8" y="340" fill="white">Rollout 2（θ1）</text><text x="902.8" y="380" fill="white">约 18.0 分钟</text>
+      <text x="1339.6" y="340" fill="white">Rollout 3（θ2）</text><text x="1339.6" y="380" fill="white">约 18.0 分钟</text>
+    </g>
+  </g>
+
+  <!-- Training: 7.4 min = 177.6 px, wait 10.6 min = 254.4 px -->
+  <g>
+    <rect x="250" y="500" width="177.6" height="160" rx="12" fill="#08a33e"/>
+    <rect x="427.6" y="500" width="254.4" height="160" rx="12" fill="#dce3eb"/>
+    <rect x="686.8" y="500" width="177.6" height="160" rx="12" fill="#08a33e"/>
+    <rect x="864.4" y="500" width="254.4" height="160" rx="12" fill="#dce3eb"/>
+    <rect x="1123.6" y="500" width="177.6" height="160" rx="12" fill="#08a33e"/>
+    <rect x="1301.2" y="500" width="254.4" height="160" rx="12" fill="#dce3eb"/>
+    <g class="block" text-anchor="middle">
+      <text x="338.8" y="555" fill="white">Train 0</text><text x="338.8" y="590" fill="white">θ0 → θ1</text><text x="338.8" y="625" fill="white">约 7.4 分钟</text>
+      <text x="554.8" y="572">等待 Rollout 1</text><text x="554.8" y="610">约 10.6 分钟</text>
+      <text x="775.6" y="555" fill="white">Train 1</text><text x="775.6" y="590" fill="white">θ1 → θ2</text><text x="775.6" y="625" fill="white">约 7.4 分钟</text>
+      <text x="991.6" y="572">等待 Rollout 2</text><text x="991.6" y="610">约 10.6 分钟</text>
+      <text x="1212.4" y="555" fill="white">Train 2</text><text x="1212.4" y="590" fill="white">θ2 → θ3</text><text x="1212.4" y="625" fill="white">约 7.4 分钟</text>
+      <text x="1428.4" y="572">等待 Rollout 3</text><text x="1428.4" y="610">约 10.6 分钟</text>
+    </g>
+  </g>
+
+  <!-- Sync labels outside the narrow true-scale bands -->
+  <g class="small" fill="#f26b21" text-anchor="middle">
+    <text x="684.4" y="255" fill="#f26b21">两边完成 → 同步 θ1（约 12 秒）→ 下一阶段</text>
+    <text x="1121.2" y="255" fill="#f26b21">两边完成 → 同步 θ2（约 12 秒）→ 下一阶段</text>
+  </g>
+
+  <!-- Warm-up note -->
+  <rect x="250" y="712" width="1305.6" height="58" rx="10" fill="#eaf3ff" stroke="#8dbcf0"/>
+  <text x="902.8" y="749" text-anchor="middle" class="small">进入该稳态流水线前：先用 θ0 完成 Rollout 0；随后 Train 0 与 Rollout 1 才开始并行。</text>
+
+  <!-- Legend -->
+  <g class="legend">
+    <rect x="330" y="816" width="42" height="25" rx="5" fill="#1682ed"/><text x="385" y="836">SGLang 推理</text>
+    <rect x="650" y="816" width="42" height="25" rx="5" fill="#08a33e"/><text x="705" y="836">Megatron 训练</text>
+    <rect x="985" y="816" width="42" height="25" rx="5" fill="#dce3eb" stroke="#aab7c4"/><text x="1040" y="836">训练卡等待</text>
+    <line x1="1300" y1="829" x2="1345" y2="829" stroke="#f26b21" stroke-width="5"/><text x="1360" y="836">权重同步</text>
+  </g>
+</svg>
