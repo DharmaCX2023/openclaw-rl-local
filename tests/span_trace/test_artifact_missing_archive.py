@@ -5,19 +5,19 @@ class IncompleteArtifactBatch(RuntimeError):pass
 class MissingArchiveTest(unittest.TestCase):
  def wrapper(self,error):
   def record(*_):raise error
-  ns={'_record_complete':record,'IncompleteArtifactBatch':IncompleteArtifactBatch,'json':json,'tarfile':tarfile}
+  ns={'_record_complete':record,'IncompleteArtifactBatch':IncompleteArtifactBatch,'json':json,'tarfile':tarfile,'Path':Path}
   fn=next(n for n in source.body if isinstance(n,ast.FunctionDef) and n.name=='_record')
   exec(compile(ast.Module(body=[fn],type_ignores=[]),'<actual-bridge>','exec'),ns)
   return ns['_record']
  def test_missing_verifier_excludes_instead_of_crashing(self):
   r=self.wrapper(FileNotFoundError('verifier.json'))('/tmp/session',{})
-  self.assertIn('verifier.json',r['infrastructure_error']);self.assertNotIn('artifact_scores',r)
+  self.assertIn('verifier.json',r['scoring_error']);self.assertIsNone(r['artifact_scores'])
  def test_incomplete_archive_timeout_is_excluded(self):
-  self.assertIn('infrastructure_error',self.wrapper(IncompleteArtifactBatch('timeout'))('/tmp/session',{}))
+  self.assertIn('scoring_error',self.wrapper(IncompleteArtifactBatch('timeout'))('/tmp/session',{}))
  def test_corrupt_json_is_excluded(self):
-  self.assertIn("infrastructure_error",self.wrapper(json.JSONDecodeError("empty", "", 0))("/tmp/session",{}))
+  self.assertIn("scoring_error",self.wrapper(json.JSONDecodeError("empty", "", 0))("/tmp/session",{}))
  def test_truncated_tar_is_excluded(self):
-  self.assertIn("infrastructure_error",self.wrapper(tarfile.ReadError("truncated"))("/tmp/session",{}))
- def test_verifier_change_still_fails(self):
-  with self.assertRaises(RuntimeError):self.wrapper(RuntimeError('verifier hash changed'))('/tmp/session',{})
+  self.assertIn("scoring_error",self.wrapper(tarfile.ReadError("truncated"))("/tmp/session",{}))
+ def test_verifier_change_excludes_only_that_trajectory(self):
+  self.assertIn("scoring_error",self.wrapper(RuntimeError('verifier hash changed'))('/tmp/session',{}))
 if __name__=='__main__':unittest.main()

@@ -87,18 +87,26 @@ def _build_task_manifest(task,session_dirs):
     criteria=set();requested=set();written=set();task_dir=None
     for session_dir in session_dirs:
         d=Path(session_dir)
-        runtime=json.loads((d/'runtime.json').read_text())
-        if runtime['task_id']!=task:
-            raise RuntimeError(f'mixed tasks while mapping {task}: {runtime["task_id"]}')
-        task_dir=Path(runtime['task_dir'])
-        chain=_writer_chain(d)
-        if chain is None:
+        try:
+            runtime=json.loads((d/'runtime.json').read_text())
+            if runtime['task_id']!=task:
+                raise RuntimeError(f'mixed tasks while mapping {task}: {runtime["task_id"]}')
+            task_dir=Path(runtime['task_dir'])
+            chain=_writer_chain(d)
+            if chain is None:
+                continue
+            components=_verifier_components(d)
+            if components is not None:criteria.update(components)
+            requested.update(chain.get('requested_paths') or [])
+            written.update(row['path'] for row in chain.get('files',[])
+                           if isinstance(row,dict) and isinstance(row.get('path'),str))
+        except Exception as exc:
+            print(
+                f'[ArtifactGRPO] ignoring unusable mapping evidence for {task} at {d}: '
+                f'{type(exc).__name__}: {exc}',
+                flush=True,
+            )
             continue
-        components=_verifier_components(d)
-        if components is not None:criteria.update(components)
-        requested.update(chain.get('requested_paths') or [])
-        written.update(row['path'] for row in chain.get('files',[])
-                       if isinstance(row,dict) and isinstance(row.get('path'),str))
     if task_dir is None:
         raise IncompleteArtifactBatch(f'{task}: no session metadata')
     if not criteria:
@@ -140,29 +148,67 @@ def _extend_policy(root,identities,policy,path):
     sessions=collections.defaultdict(list)
     for sid in identities.values():
         d=root/hashlib.sha256(sid.encode()).hexdigest()[:24]
-        runtime=json.loads((d/'runtime.json').read_text())
-        sessions[runtime['task_id']].append(d)
+        try:
+            runtime=json.loads((d/'runtime.json').read_text())
+            sessions[runtime['task_id']].append(d)
+        except Exception as exc:
+            # _record will turn this session into one excluded trajectory. Other
+            # sessions must still be allowed to establish their task mappings.
+            print(
+                f'[ArtifactGRPO] cannot read mapping identity for {sid}; '
+                f'dropping that trajectory later: {type(exc).__name__}: {exc}',
+                flush=True,
+            )
     missing=sorted(set(sessions)-set(policy))
     if missing and os.environ.get('OPENCLAW_ARTIFACT_GRPO_DYNAMIC_MANIFEST')!='1':
         raise IncompleteArtifactBatch(f'artifact manifest missing tasks: {missing}')
-    try:
-        for task in missing:policy[task]=_build_task_manifest(task,sessions[task])
-    except (FileNotFoundError, tarfile.TarError, json.JSONDecodeError, KeyError) as exc:
-        raise IncompleteArtifactBatch(f'artifact mapping evidence incomplete: {exc}') from exc
-    if missing:
+    built=[]
+    for task in missing:
+        try:
+            policy[task]=_build_task_manifest(task,sessions[task]);built.append(task)
+        except Exception as exc:
+            # A mapping failure invalidates only this task's trajectories in the
+            # current step. Do not persist it, so a later batch can retry.
+            policy[task]={'unmapped':True,'error':f'{type(exc).__name__}: {exc}'}
+            print(
+                f'[ArtifactGRPO] task {task} has no artifact mapping; '
+                f'dropping its trajectories: {type(exc).__name__}: {exc}',
+                flush=True,
+            )
+    if built:
+        persisted={k:v for k,v in policy.items() if not (isinstance(v,dict) and v.get('unmapped'))}
         tmp=path.with_suffix(path.suffix+'.tmp')
-        tmp.write_text(json.dumps(policy,ensure_ascii=False,indent=2))
+        tmp.write_text(json.dumps(persisted,ensure_ascii=False,indent=2))
         os.replace(tmp,path)
-        print(f'[ArtifactGRPO] froze mappings for tasks={missing}',flush=True)
+        print(f'[ArtifactGRPO] froze mappings for tasks={built}',flush=True)
 
 
 def _record(session_dir,policy):
-    # A finalized archive may lack verifier/snapshot files after an environment
-    # failure. Exclude its group in relaxed runs; never invent an A score.
+    # Any failure local to one session excludes only that trajectory. The caller
+    # may continue with all scored siblings; no artifact score is fabricated.
     try:
         return _record_complete(session_dir,policy)
-    except (FileNotFoundError, IncompleteArtifactBatch, json.JSONDecodeError, tarfile.TarError, EOFError, UnicodeDecodeError) as exc:
-        return dict(session_dir=str(session_dir),infrastructure_error=f"{type(exc).__name__}: {exc}")
+    except Exception as exc:
+        d=Path(session_dir)
+        result=dict(
+            session_dir=str(d),
+            artifact_scores=None,
+            artifact_spans={},
+            turns=0,
+            outcome=0.0,
+            scoring_error=f'{type(exc).__name__}: {exc}',
+        )
+        try:
+            runtime=json.loads((d/'runtime.json').read_text())
+            result.update(task_id=runtime.get('task_id'),session=runtime.get('session_id'))
+        except Exception:
+            pass
+        print(
+            f'[ArtifactGRPO] dropping trajectory with unusable scoring evidence at {d}: '
+            f'{type(exc).__name__}: {exc}',
+            flush=True,
+        )
+        return result
 
 
 def _record_complete(session_dir,policy):
@@ -179,6 +225,8 @@ def _record_complete(session_dir,policy):
         time.sleep(1)
     runtime=json.loads((d/'runtime.json').read_text())
     task=runtime['task_id'];manifest=policy[task]
+    if manifest.get('unmapped'):
+        return dict(task_id=task,session=runtime['session_id'],outcome=0.0,artifact_scores=None,artifact_spans={},turns=0,scoring_error=manifest.get('error') or 'no artifact mapping')
     code=Path(runtime['task_dir'])/'reward/check.py'
     if hashlib.sha256(code.read_bytes()).hexdigest()!=manifest['checker_sha256']:
         raise RuntimeError(f'Verifier changed since mapping review: {task}')
@@ -228,9 +276,31 @@ def prepare(samples):
         require_complete_batch({key:{} for key in identities})
     records={}
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as pool:
-        futures={pool.submit(_record,str(root/hashlib.sha256(sid.encode()).hexdigest()[:24]),policy):key for key,sid in identities.items()}
+        futures={
+            pool.submit(_record,str(root/hashlib.sha256(sid.encode()).hexdigest()[:24]),policy):(key,sid)
+            for key,sid in identities.items()
+        }
         for future in concurrent.futures.as_completed(futures):
-            key=futures[future];r=future.result();r.update(group_id=key[0],trajectory_id=key[1]);records[key]=r
+            key,sid=futures[future]
+            try:
+                r=future.result()
+            except Exception as exc:
+                # Process-pool transport or an unforeseen worker exception is
+                # still local to this trajectory.
+                r=dict(
+                    session=sid,
+                    artifact_scores=None,
+                    artifact_spans={},
+                    turns=0,
+                    outcome=0.0,
+                    scoring_error=f'{type(exc).__name__}: {exc}',
+                )
+                print(
+                    f'[ArtifactGRPO] scoring worker failed for {sid}; dropping trajectory: '
+                    f'{type(exc).__name__}: {exc}',
+                    flush=True,
+                )
+            r.update(group_id=key[0],trajectory_id=key[1]);records[key]=r
     if os.environ.get('OPENCLAW_ARTIFACT_GRPO_STRICT')=='1':
         try:require_complete_batch(records)
         except RuntimeError as exc:
@@ -241,42 +311,47 @@ def prepare(samples):
     counts=collections.Counter(k[0] for k in identities)
     if os.environ.get("OPENCLAW_ARTIFACT_GRPO_STRICT")=="1" and any(n!=expected for n in counts.values()):
         raise RuntimeError(f"incomplete A-GRPO groups: {dict(counts)}")
-    unavailable_groups={key[0] for key,r in records.items() if r.get('infrastructure_error')}
-    unavailable_groups.update(group for group,count in counts.items() if count < 2)
-    failed_groups={key[0] for key,r in records.items() if r.get('scoring_error')} - unavailable_groups
-    if failed_groups and os.environ.get('OPENCLAW_ARTIFACT_GRPO_FAIL_CLOSED')=='1':
-        raise IncompleteArtifactBatch(
-            f'artifact scoring failed; refusing outcome-only fallback for groups={sorted(failed_groups)}'
-        )
-    for key,r in records.items():
-        if key[0] in failed_groups:
-            r['artifact_scores']={'__outcome_only_scoring_failure__':0.0}
-            r['artifact_spans']={}
+    # A trajectory whose verifier, archive, mapping, or score projection is not
+    # usable is left out individually. Scored siblings retain artifact credit.
+    unavailable_groups=set()
+    unscored=sorted(
+        key for key,r in records.items()
+        if r.get('scoring_error') or r.get('infrastructure_error')
+    )
+    if unscored:
+        print(f'[ArtifactGRPO] leaving {len(unscored)} unscored trajectories out of the update: {unscored}',flush=True)
     projected,audit=project_available_groups(samples,records,unavailable_groups,
-        float(os.environ.get('OPENCLAW_ARTIFACT_GRPO_STRENGTH','1')))
+        float(os.environ.get('OPENCLAW_ARTIFACT_GRPO_STRENGTH','1')),set(unscored))
     out=Path(os.environ['OPENCLAW_SPAN_TRACE_ROOT']).parent/'artifact_advantage_audit';out.mkdir(exist_ok=True)
     stamp=hashlib.sha256('\n'.join(sorted(identities.values())).encode()).hexdigest()[:20]
-    (out/f'{stamp}.json').write_text(json.dumps({'sessions':list(identities.values()),'trajectories':audit,'sample_count':len(samples),'outcome_only_failed_scoring_groups':sorted(failed_groups),'excluded_infrastructure_groups':sorted(unavailable_groups),'infrastructure_errors':[r for r in records.values() if r.get('infrastructure_error')]},ensure_ascii=False,indent=2))
+    (out/f'{stamp}.json').write_text(json.dumps({'sessions':list(identities.values()),'trajectories':audit,'sample_count':len(samples),'excluded_unscored_trajectories':[list(key) for key in unscored],'excluded_infrastructure_groups':sorted(unavailable_groups),'infrastructure_errors':[r for r in records.values() if r.get('infrastructure_error')]},ensure_ascii=False,indent=2))
     return projected
 
 
-def project_available_groups(samples,records,excluded_groups,strength=1.0):
-    """Drop whole damaged groups from loss without fabricating A/outcome scores.
+def project_available_groups(samples,records,excluded_groups,strength=1.0,excluded_trajectories=()):
+    """Drop damaged groups and individual unscored trajectories from the loss.
 
     Mutate mask lists in place: rollout.py has already attached these exact
     lists to train_data; logical-rollout denominators are computed afterwards.
+    Excluded trajectories get no outcome-only advantage.
     """
-    positions=[i for i,s in enumerate(samples) if s.group_index not in excluded_groups]
-    if not positions:raise RuntimeError('No complete artifact-GRPO groups remain after infrastructure failures')
+    excluded_trajectories=set(excluded_trajectories)
+    def dropped(sample):
+        return sample.group_index in excluded_groups or (sample.group_index,sample.index) in excluded_trajectories
+    positions=[i for i,s in enumerate(samples) if not dropped(s)]
+    if not positions:raise RuntimeError('No usable artifact-GRPO trajectories remain after scoring')
     usable=[samples[i] for i in positions]
-    values,audit=project_samples(usable,records,strength)
+    values,audit=project_samples(usable,records,strength,skip_broken=True)
     projected=[[0.0]*s.response_length for s in samples]
     for i,v in zip(positions,values):projected[i]=v
     for s in samples:
-        if s.group_index in excluded_groups:
+        if dropped(s):
             s.loss_mask[:]=[0]*len(s.loss_mask)
-    if excluded_groups:
-        print(f'[ArtifactGRPO] excluded infrastructure-damaged groups={sorted(excluded_groups)}; training {len(audit)} complete trajectories',flush=True)
+    trained=sum(1 for row in audit if 'dropped' not in row)
+    if trained == 0:
+        raise RuntimeError('No usable artifact-GRPO trajectories remain after validation')
+    if excluded_groups or excluded_trajectories:
+        print(f'[ArtifactGRPO] excluded infrastructure-damaged groups={sorted(excluded_groups)}; unscored trajectories={sorted(excluded_trajectories)}; training {trained} complete trajectories',flush=True)
     return projected,audit
 
 

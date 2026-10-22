@@ -29,9 +29,23 @@ class ArtifactGRPOTest(unittest.TestCase):
         a,d=m.project_tokens(s,[dict(turn_ids=ids,loss_mask=mask)])
         b,e=m.project_tokens(s,[dict(turn_ids=ids[:4],loss_mask=mask[:4]),dict(turn_ids=ids[4:],loss_mask=mask[4:])])
         self.assertEqual(a[0],b[0]+b[1]);self.assertAlmostEqual(d['endpoint_error'],0);self.assertEqual(a[0][2],0)
-    def test_verifier_missing_is_not_zero(self):
-        with self.assertRaises(KeyError):m.artifact_scores({}, {'a':{'checks':{'valid':1}}})
+    def test_missing_check_from_successful_sparse_verifier_is_zero(self):
+        self.assertEqual(m.artifact_scores({}, {'a':{'checks':{'valid':1}}}),{'a':0})
         self.assertEqual(m.artifact_scores({'valid':False},{'a':{'checks':{'valid':1}}}),{'a':0})
+    def test_task_1195_sparse_failed_content_check_does_not_crash(self):
+        manifest={'top5.csv':{'checks':{
+            'has_top5_details_csv':1,
+            'top_5_details_schema_ok':1,
+            'top_5_details_content_ok':1,
+        }}}
+        components={
+            'has_top5_details_csv':True,
+            'top_5_details_schema_ok':True,
+            # The verifier emits the legacy spelling as false and omits the
+            # mapped spelling when content validation fails.
+            'top5_details_content_ok':False,
+        }
+        self.assertEqual(m.artifact_scores(components,manifest),{'top5.csv':2/3})
     def test_duplicate_trajectory_and_invalid_alignment_fail(self):
         r=row(0,{'a':1},{})
         with self.assertRaises(ValueError):m.build_group_signals([r,r])

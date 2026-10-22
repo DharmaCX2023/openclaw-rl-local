@@ -563,8 +563,15 @@ if [ "${OPENCLAW_DISABLE_CHECKPOINT_SAVE}" = "0" ]; then
 fi
 if [ -n "${LOAD_CKPT:-}" ]; then
   CKPT_ARGS+=(--load "${LOAD_CKPT}")
+  if [ "${USE_CHECKPOINT_OPT_PARAM_SCHEDULER:-0}" = "1" ] && [ "${OVERRIDE_OPT_PARAM_SCHEDULER:-0}" = "1" ]; then
+    echo "USE_CHECKPOINT_OPT_PARAM_SCHEDULER and OVERRIDE_OPT_PARAM_SCHEDULER cannot both be set." >&2
+    exit 2
+  fi
   if [ "${USE_CHECKPOINT_OPT_PARAM_SCHEDULER:-0}" = "1" ]; then
     CKPT_ARGS+=(--use-checkpoint-opt-param-scheduler)
+  fi
+  if [ "${OVERRIDE_OPT_PARAM_SCHEDULER:-0}" = "1" ]; then
+    CKPT_ARGS+=(--override-opt-param-scheduler)
   fi
 fi
 if [ "${NO_LOAD_OPTIM:-0}" = "1" ]; then

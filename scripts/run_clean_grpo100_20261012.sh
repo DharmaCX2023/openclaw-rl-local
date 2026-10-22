@@ -40,6 +40,12 @@ if [ "${CLEAN_RESUME:-0}" = "1" ]; then
 else
   unset LOAD_CKPT
 fi
+if [ "$ARM" = or ] && [ "${CLEAN_RESUME:-0}" = "1" ]; then
+  # Iteration 39 was saved with num_rollout=40. Continuing to step 100 changes
+  # Megatron's scheduler length from 2560 to 6400. Constant LR is unchanged;
+  # Megatron's own override flag accepts that length.
+  export OVERRIDE_OPT_PARAM_SCHEDULER=1
+fi
 
 export NUM_GPUS=8 ACTOR_GPUS=4 EXPECTED_ACTOR_GPUS=4 ROLLOUT_GPUS=4 SGLANG_TP=2
 export NUM_ROLLOUT="${CLEAN_NUM_ROLLOUT:-100}" ROLLOUT_BATCH_SIZE=8 N_SAMPLES_PER_PROMPT=8
