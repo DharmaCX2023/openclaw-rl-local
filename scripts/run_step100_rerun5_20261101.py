@@ -1,0 +1,416 @@
+#!/usr/bin/env python3
+"""Re-evaluate two step-100 checkpoints, five times each.
+
+own: the step9-continuation distcp iter_0000099.
+authors: the released Hugging Face step100 snapshot.
+
+Same protocol as the 3-run rerun that finished earlier today:
+200 tasks, temperature 0.7, top-p 1.0, top-k -1, deterministic
+inference off, no fixed sampling seed, multi-tool calls unrestricted.
+Results go to a new directory and do not overwrite that 3-run table.
+The Serper key is read from the repo .env, not from this process.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import statistics
+import subprocess
+import time
+from pathlib import Path
+
+
+REPO = Path("/root/openclaw-rl-local")
+LAUNCHER = REPO / "clawgym-official/.run_step39_eval_sync_20260812-091700.sh"
+EVAL_TASKS = REPO / "clawgym-official/data/clawgym_eval"
+OUT = Path(
+    "/mnt/humf/openclaw-rl-checkpoints/step100-rerun5-natural-eval-20261101"
+)
+MODELS = ("own", "authors")
+REPETITIONS = 5
+CHECKPOINTS = {
+    "own": Path(
+        "/mnt/humf/openclaw-rl-checkpoints/"
+        "step9cont-grpo100-20261029/iter_0000099"
+    ),
+    "authors": Path(
+        "/mnt/humf/openclaw-rl-checkpoints/"
+        "official-clawgym-paper-checkpoints-20261027/step100"
+    ),
+}
+KIND = {"own": "distcp", "authors": "hf"}
+ITERATIONS = {"own": 99}
+SERIAL = {"own": 27, "authors": 32}
+REMOTE_HOST = "159.138.50.147"
+REMOTE_KEY = "/root/openclaw_cpu_key"
+
+
+def checkpoint_ready(model: str) -> tuple[bool, str]:
+    path = CHECKPOINTS[model]
+    if KIND[model] == "distcp":
+        if not path.is_dir():
+            return False, "missing iteration directory"
+        shards = sorted(path.glob("*.distcp"))
+        if not shards:
+            return False, "no distcp shards"
+        return True, f"{len(shards)} distcp shards ready"
+    index_path = path / "model.safetensors.index.json"
+    if not index_path.exists():
+        return False, "missing model.safetensors.index.json"
+    index = json.loads(index_path.read_text())
+    shards = sorted(set(index["weight_map"].values()))
+    missing = [name for name in shards if not (path / name).is_file()]
+    if missing:
+        return False, f"{len(missing)}/{len(shards)} shards missing"
+    return True, f"{len(shards)} shards ready"
+
+
+def remote_command(command: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            "ssh",
+            "-i",
+            REMOTE_KEY,
+            "-o",
+            "BatchMode=yes",
+            "-o",
+            "StrictHostKeyChecking=no",
+            "-o",
+            "ConnectTimeout=8",
+            f"root@{REMOTE_HOST}",
+            command,
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+
+
+def clean_stopped_remote_containers() -> None:
+    listed = remote_command("docker ps --format '{{.Names}}'")
+    if listed.returncode != 0:
+        raise RuntimeError(f"remote Docker listing failed: {listed.stdout.strip()}")
+    orphaned: list[str] = []
+    for name in listed.stdout.splitlines():
+        if not name.startswith("clawgym-rl-"):
+            continue
+        parts = name.split("-")
+        if len(parts) < 4 or not parts[3].isdigit():
+            continue
+        if not Path(f"/proc/{parts[3]}").exists():
+            orphaned.append(name)
+    quoted = " ".join(json.dumps(name) for name in orphaned)
+    command = (
+        "ids=$(docker ps -aq -f status=exited -f status=created -f status=dead); "
+        'if [ -n "$ids" ]; then docker rm -f $ids >/dev/null || true; fi; '
+        f"if [ -n {json.dumps(quoted)} ]; then docker rm -f {quoted} >/dev/null || true; fi; "
+        'printf "removed_orphans=%s running_clawgym=%s\\n" '
+        f'"{len(orphaned)}" "$(docker ps --format "{{{{.Names}}}}" | grep -c "^clawgym-rl-" || true)"'
+    )
+    result = remote_command(command)
+    if result.returncode != 0:
+        raise RuntimeError(f"remote Docker cleanup failed: {result.stdout.strip()}")
+    print(f"DOCKER_CLEANUP {result.stdout.strip()}", flush=True)
+
+
+def task_ids() -> list[str]:
+    ids = sorted(path.name for path in EVAL_TASKS.iterdir() if path.is_dir())
+    if len(ids) != 200:
+        raise RuntimeError(f"expected 200 eval tasks, found {len(ids)}")
+    return ids
+
+
+def valid_result(path: Path) -> bool:
+    if not path.exists():
+        return False
+    try:
+        result = json.loads(path.read_text())
+        metrics = result["metrics"]
+        return (
+            result["exit_code"] == 0
+            and metrics["eval/clawgym_eval-task_count"] == 200
+            and metrics["eval/clawgym_eval-n_collected"] == 200
+            and metrics["eval/clawgym_eval-n_skipped"] == 0
+        )
+    except Exception:
+        return False
+
+
+def run_environment(
+    model: str,
+    repetition: int,
+    phase: str,
+    run_dir: Path,
+    selected_tasks: list[str] | None,
+) -> dict[str, str]:
+    serial = SERIAL[model] + repetition - 1
+    env = os.environ.copy()
+    for key in (
+        "OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE",
+        "PYTHONHASHSEED",
+        "CUBLAS_WORKSPACE_CONFIG",
+        "NVIDIA_TF32_OVERRIDE",
+        "TORCH_ALLOW_TF32_CUBLAS_OVERRIDE",
+        "NCCL_ALGO",
+        "NCCL_PROTO",
+        "NVTE_ALLOW_NONDETERMINISTIC_ALGO",
+        "HF_CKPT",
+        "REF_LOAD",
+        "LOAD_CKPT",
+        "OPENCLAW_MAX_TOOL_CALLS_PER_TURN",
+        "SERPER_API_KEY",
+        "SERPER_KEY",
+    ):
+        env.pop(key, None)
+    env.update(
+        {
+            "RUN_STAMP": f"rerun5-{model}-r{repetition}-{phase}",
+            "EXP_NAME": f"rerun5-{model}-r{repetition}",
+            "SAVE_CKPT": str(run_dir / "save"),
+            "OPENCLAW_DISABLE_CHECKPOINT_SAVE": "1",
+            "NUM_ROLLOUT": "1",
+            "ROLLOUT_BATCH_SIZE": "8",
+            "N_SAMPLES_PER_PROMPT": "8",
+            "EVAL_INTERVAL": "1000",
+            "SKIP_EVAL_BEFORE_TRAIN": "0",
+            "OPENCLAW_EVAL_NUM_WORKERS": "8",
+            "OPENCLAW_EVAL_N_SAMPLES": "1",
+            "OPENCLAW_EVAL_TASKS": str(EVAL_TASKS),
+            "OPENCLAW_TRAIN_NUM_WORKERS": "8",
+            "OPENCLAW_TRAIN_SHUFFLE_SEED": "0",
+            "OPENCLAW_DETERMINISTIC_TOOL_CALL_IDS": "0",
+            "SGLANG_ENABLE_DETERMINISTIC_INFERENCE": "0",
+            "MEGATRON_DETERMINISTIC_MODE": "0",
+            "SGLANG_ENABLE_CUDA_GRAPH": "1",
+            "EVAL_TEMPERATURE": "0.7",
+            "EVAL_TOP_P": "1.0",
+            "EVAL_TOP_K": "-1",
+            "ROLLOUT_TEMPERATURE": "0.7",
+            "ROLLOUT_TOP_P": "1.0",
+            "ROLLOUT_TOP_K": "-1",
+            "EVAL_MAX_RESPONSE_LEN": "8192",
+            "EVAL_MAX_CONTEXT_LEN": "65536",
+            "OPENCLAW_MAX_RESPONSE_TOKENS": "8192",
+            "OPENCLAW_TRAJECTORY_MAX_TOKENS": "65536",
+            "OPENCLAW_CONTEXT_WINDOW": "65536",
+            "OPENCLAW_MAX_AGENT_STEPS": "96",
+            "OPENCLAW_MAX_COMPACTION_EVENTS": "8",
+            "OPENCLAW_ENV_FILE": str(REPO / ".env"),
+            "OPENCLAW_REMOTE_BASE": (
+                f"/root/clawgym_eval_rerun5_{model}_r{repetition}_{phase}"
+            ),
+            "OPENCLAW_REMOTE_PROXY_PORT": str(60000 + serial),
+            "PORT": str(37000 + serial),
+            "OPENCLAW_GATEWAY_PORT_BASE": str(20000 + serial * 1000),
+            "OPENCLAW_GATEWAY_PORT_MAX_SLOTS": "256",
+            "OPENCLAW_REMOTE_DOCKER_START_CONCURRENCY": "8",
+            "OPENCLAW_REMOTE_SSH_POOL_SIZE": "8",
+            "OPENCLAW_RECORD_FILE": str(run_dir / "official_proxy_records.jsonl"),
+            "TENSORBOARD_DIR": str(run_dir / "tensorboard"),
+        }
+    )
+    if KIND[model] == "hf":
+        env["HF_CKPT"] = str(CHECKPOINTS[model])
+        env["REF_LOAD"] = str(CHECKPOINTS[model])
+    else:
+        env["LOAD_CKPT"] = str(run_dir / "checkpoint_view")
+    if selected_tasks is None:
+        env["OPENCLAW_EVAL_TASK_IDS"] = ""
+        env["OPENCLAW_EVAL_TASK_INDEX_MAP"] = ""
+    else:
+        mapping = {
+            task_id: int(task_id.rsplit("_", 1)[1]) for task_id in selected_tasks
+        }
+        env["OPENCLAW_EVAL_TASK_IDS"] = ",".join(selected_tasks)
+        env["OPENCLAW_EVAL_TASK_INDEX_MAP"] = json.dumps(
+            mapping, separators=(",", ":")
+        )
+    return env
+
+
+def launch(
+    model: str,
+    repetition: int,
+    phase: str,
+    selected_tasks: list[str] | None,
+) -> tuple[int, list[dict]]:
+    clean_stopped_remote_containers()
+    run_dir = OUT / model / f"run{repetition}" / phase
+    (run_dir / "save").mkdir(parents=True, exist_ok=True)
+    if KIND[model] == "distcp":
+        view = run_dir / "checkpoint_view"
+        view.mkdir(parents=True, exist_ok=True)
+        link = view / CHECKPOINTS[model].name
+        if link.is_symlink() or link.exists():
+            link.unlink()
+        link.symlink_to(CHECKPOINTS[model])
+        (view / "latest_checkpointed_iteration.txt").write_text(
+            f"{ITERATIONS[model]}\n"
+        )
+    log_path = run_dir / "run.log"
+    env = run_environment(model, repetition, phase, run_dir, selected_tasks)
+    print(
+        f"EVAL_START model={model} run={repetition} phase={phase} "
+        f"tasks={200 if selected_tasks is None else len(selected_tasks)} "
+        f"at={time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}",
+        flush=True,
+    )
+    with log_path.open("w") as log_file:
+        proc = subprocess.run(
+            ["bash", str(LAUNCHER)],
+            cwd=REPO,
+            env=env,
+            stdout=log_file,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+    candidates = list((run_dir / "save").glob("eval_artifacts/**/results.jsonl"))
+    rows: list[dict] = []
+    if len(candidates) == 1:
+        rows = [
+            json.loads(line)
+            for line in candidates[0].read_text().splitlines()
+            if line.strip()
+        ]
+    print(
+        f"EVAL_END model={model} run={repetition} phase={phase} "
+        f"code={proc.returncode} rows={len(rows)} "
+        f"completed={sum(row.get('status') == 'completed' for row in rows)} "
+        f"at={time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}",
+        flush=True,
+    )
+    return proc.returncode, rows
+
+
+def write_result(model: str, repetition: int, rows_by_task: dict[str, dict]) -> None:
+    ordered_ids = task_ids()
+    rows = [rows_by_task[task_id] for task_id in ordered_ids]
+    rewards = [float(row["reward"]) for row in rows]
+    average = sum(rewards) / len(rewards)
+    correct = sum(reward > 0.5 for reward in rewards)
+    run_root = OUT / model / f"run{repetition}"
+    (run_root / "merged_results.jsonl").write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows)
+    )
+    result = {
+        "model": model,
+        "repetition": repetition,
+        "checkpoint": str(CHECKPOINTS[model]),
+        "exit_code": 0,
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "top_k": -1,
+        "deterministic_inference": False,
+        "fixed_sampling_seed": False,
+        "metrics": {
+            "eval/clawgym_eval-avg_reward": average,
+            "eval/clawgym_eval-correct_count": correct,
+            "eval/clawgym_eval-correct_rate": correct / 200,
+            "eval/clawgym_eval-task_count": 200,
+            "eval/clawgym_eval-n_collected": 200,
+            "eval/clawgym_eval-n_skipped": 0,
+            "eval/clawgym_eval-avg_reward_collected_only": average,
+            "eval/clawgym_eval": average,
+        },
+    }
+    (run_root / "result.json").write_text(
+        json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+    )
+
+
+def aggregate() -> None:
+    header = " | ".join(f"run{index}" for index in range(1, REPETITIONS + 1))
+    lines = [
+        "# step 100 rerun: own continuation and authors, five times each",
+        "",
+        "200 tasks, temperature 0.7, top-p 1.0, top-k -1, "
+        "deterministic inference off, no fixed sampling seed.",
+        "",
+        f"| model | {header} | mean | sample stdev |",
+        "|" + "---|" * (REPETITIONS + 3),
+    ]
+    for model in MODELS:
+        values: list[float | None] = []
+        for repetition in range(1, REPETITIONS + 1):
+            path = OUT / model / f"run{repetition}/result.json"
+            if valid_result(path):
+                data = json.loads(path.read_text())
+                values.append(data["metrics"]["eval/clawgym_eval-avg_reward"])
+            else:
+                values.append(None)
+        present = [value for value in values if value is not None]
+        cells = " | ".join(
+            f"{value:.6f}" if value is not None else "" for value in values
+        )
+        mean = f"{statistics.mean(present):.6f}" if present else ""
+        std = f"{statistics.stdev(present):.6f}" if len(present) > 1 else ""
+        lines.append(f"| {model} | {cells} | {mean} | {std} |")
+    (OUT / "aggregate_results.md").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines), flush=True)
+
+
+def evaluate_one(model: str, repetition: int) -> None:
+    result_path = OUT / model / f"run{repetition}/result.json"
+    if valid_result(result_path):
+        print(f"EVAL_SKIP model={model} run={repetition} already complete", flush=True)
+        return
+    expected = set(task_ids())
+    completed: dict[str, dict] = {}
+    for attempt in range(1, 4):
+        _, rows = launch(model, repetition, f"full-attempt{attempt}", None)
+        for row in rows:
+            if (
+                row.get("task_id") in expected
+                and row.get("status") == "completed"
+                and row.get("reward") is not None
+            ):
+                completed[row["task_id"]] = row
+        if completed:
+            break
+    if not completed:
+        raise RuntimeError(f"{model} run {repetition}: no completed full-eval rows")
+    for patch_round in range(1, 5):
+        missing = sorted(expected - completed.keys())
+        if not missing:
+            write_result(model, repetition, completed)
+            return
+        print(
+            f"EVAL_PATCH model={model} run={repetition} "
+            f"round={patch_round} missing={len(missing)}",
+            flush=True,
+        )
+        _, rows = launch(model, repetition, f"patch{patch_round}", missing)
+        for row in rows:
+            if (
+                row.get("task_id") in expected
+                and row.get("status") == "completed"
+                and row.get("reward") is not None
+            ):
+                completed[row["task_id"]] = row
+    raise RuntimeError(
+        f"{model} run {repetition}: {len(expected - completed.keys())} tasks "
+        "still missing after selective retries"
+    )
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    for model in MODELS:
+        ready, detail = checkpoint_ready(model)
+        print(f"CKPT_STATUS {model}={'ready' if ready else detail}", flush=True)
+        if not ready:
+            raise RuntimeError(f"{model} checkpoint is not ready: {detail}")
+    for model in MODELS:
+        for repetition in range(1, REPETITIONS + 1):
+            evaluate_one(model, repetition)
+            aggregate()
+    print(
+        f"QUEUE_DONE at={time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}",
+        flush=True,
+    )
+
+
+if __name__ == "__main__":
+    main()

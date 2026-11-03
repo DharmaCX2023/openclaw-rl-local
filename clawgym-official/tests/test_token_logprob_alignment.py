@@ -98,6 +98,7 @@ def _owner():
     owner._session_sglang_stats = {}
     owner._step_counts = {}
     owner._pending_step_data = {}
+    owner._finalized_sessions = set()
     owner._completed_reward_submissions = {}
     owner._pending_records = {}
     owner._conversation_logs = {}

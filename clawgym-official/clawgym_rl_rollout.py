@@ -916,7 +916,88 @@ def _prepare_workspace(task: TaskSpec, workspace_dir: Path):
         _copy_tree_contents(input_files_dir, input_dir)
 
 
+def _build_official_gateway_config(runtime: ContainerRuntime, rl_port: int):
+    """Gateway config from the public ClawGym 4B rollout."""
+    model_proxy_port = _remote_proxy_port() if runtime.remote_root is not None else rl_port
+    config = {
+        "gateway": {
+            "port": int(runtime.gateway_url.rsplit(":", 1)[1]),
+            "mode": "local",
+            "bind": "loopback",
+            "auth": {"mode": "token", "token": runtime.token},
+            "http": {"endpoints": {"chatCompletions": {"enabled": True}}},
+            "tailscale": {"mode": "off", "resetOnExit": False},
+            "nodes": {
+                "denyCommands": [
+                    "camera.snap", "camera.clip", "screen.record",
+                    "contacts.add", "calendar.add", "reminders.add", "sms.send",
+                ],
+            },
+        },
+        "models": {
+            "mode": "merge",
+            "providers": {
+                "rl-server": {
+                    "baseUrl": f"http://localhost:{model_proxy_port}/v1",
+                    "api": "openai-completions",
+                    "models": [
+                        {
+                            "id": runtime.model_id,
+                            "name": "RL Model",
+                            "reasoning": False,
+                            "input": ["text"],
+                            "cost": {
+                                "input": 0,
+                                "output": 0,
+                                "cacheRead": 0,
+                                "cacheWrite": 0,
+                            },
+                            "contextWindow": int(
+                                os.environ.get("OPENCLAW_CONTEXT_WINDOW", "128000")
+                            ),
+                            "maxTokens": int(
+                                os.environ.get(
+                                    "OPENCLAW_MAX_RESPONSE_TOKENS",
+                                    os.environ.get("OPENCLAW_MAX_TOKENS", "8192"),
+                                )
+                            ),
+                        }
+                    ],
+                }
+            },
+        },
+        "agents": {
+            "defaults": {
+                "model": {"primary": f"rl-server/{runtime.model_id}"},
+                "workspace": "/root/.openclaw/workspace",
+                "maxConcurrent": 4,
+                "subagents": {"maxConcurrent": 4},
+                "timeoutSeconds": 1000,
+                "llm": {"idleTimeoutSeconds": 0},
+                "heartbeat": {"every": "3680000m"},
+            }
+        },
+        "tools": {
+            "profile": "coding",
+            "deny": ["web_search", "memory_search"],
+            "exec": {"host": "gateway", "security": "full"},
+        },
+        "commands": {
+            "native": "auto",
+            "nativeSkills": "auto",
+            "restart": True,
+            "ownerDisplay": "raw",
+        },
+        "session": {"dmScope": "per-channel-peer"},
+    }
+    with (runtime.config_dir / "openclaw.json").open("w", encoding="utf-8") as file_handle:
+        json.dump(config, file_handle)
+
+
 def _build_gateway_config(runtime: ContainerRuntime, rl_port: int):
+    if os.environ.get("OPENCLAW_GATEWAY_CONFIG", "") == "official":
+        _build_official_gateway_config(runtime, rl_port)
+        return
     # Official ClawGym reference config, with only the migration-required
     # six-tool allowlist and pinned skills policy added.
     model_proxy_port = _remote_proxy_port() if runtime.remote_root is not None else rl_port

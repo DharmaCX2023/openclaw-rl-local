@@ -161,7 +161,13 @@ export OPENCLAW_EVAL_SAVE_WORKSPACES="${OPENCLAW_EVAL_SAVE_WORKSPACES:-1}"
 export OPENCLAW_EVAL_ARTIFACT_STRICT="${OPENCLAW_EVAL_ARTIFACT_STRICT:-1}"
 export OPENCLAW_EVAL_WORKSPACE_MAX_BYTES="${OPENCLAW_EVAL_WORKSPACE_MAX_BYTES:-134217728}"
 export OPENCLAW_EVAL_WORKSPACE_TIMEOUT="${OPENCLAW_EVAL_WORKSPACE_TIMEOUT:-600}"
-export OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE="${OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE:-20260826}"
+if [ "${SGLANG_ENABLE_DETERMINISTIC_INFERENCE:-1}" = "1" ]; then
+  export OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE="${OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE:-20260826}"
+else
+  # Natural sampling: no fixed per-request seed base (empty value is
+  # filtered out of the Ray runtime env, so the api server sees it unset).
+  export OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE="${OPENCLAW_DETERMINISTIC_SAMPLING_SEED_BASE:-}"
+fi
 export OPENCLAW_DETERMINISTIC_TOOL_CALL_IDS="${OPENCLAW_DETERMINISTIC_TOOL_CALL_IDS:-1}"
 export OPENCLAW_FORMAT_PENALTY="${OPENCLAW_FORMAT_PENALTY:-0}"
 export OPENCLAW_CHAT_TURN_TIMEOUT="${OPENCLAW_CHAT_TURN_TIMEOUT:-1200}"
@@ -595,6 +601,9 @@ ROLLOUT_ARGS=(
   --reward-key score
   --num-steps-per-rollout 1
 )
+if [ -n "${START_ROLLOUT_ID:-}" ]; then
+  ROLLOUT_ARGS+=(--start-rollout-id "${START_ROLLOUT_ID}")
+fi
 if [ -n "${OPENCLAW_LOAD_DEBUG_ROLLOUT_DATA:-}" ]; then
   ROLLOUT_ARGS+=(--load-debug-rollout-data "${OPENCLAW_LOAD_DEBUG_ROLLOUT_DATA}")
 fi
@@ -622,8 +631,12 @@ GRPO_ARGS=(
   --eps-clip 0.2
   --eps-clip-high 0.28
   --use-dynamic-global-batch-size
-  --calculate-per-rollout-loss
 )
+if [ "${CALCULATE_PER_TOKEN_LOSS:-0}" = "1" ]; then
+  GRPO_ARGS+=(--calculate-per-token-loss)
+else
+  GRPO_ARGS+=(--calculate-per-rollout-loss)
+fi
 if [ "${USE_ROUTING_REPLAY}" = "1" ]; then
   GRPO_ARGS+=(--use-routing-replay)
 fi
@@ -736,6 +749,9 @@ CUSTOM_ARGS=(
 EVAL_ARGS=(
   --eval-interval "${EVAL_INTERVAL_VALUE}"
   --eval-function-path span_trace_rollout.generate_rollout_clawgym_rl
+  --eval-temperature "${EVAL_TEMPERATURE:-0.7}"
+  --eval-top-p "${EVAL_TOP_P:-1.0}"
+  --eval-top-k "${EVAL_TOP_K:--1}"
 )
 if [ "${SKIP_EVAL_BEFORE_TRAIN}" = "1" ]; then
   EVAL_ARGS+=(--skip-eval-before-train)
@@ -745,11 +761,13 @@ MISC_ARGS=(
   --attention-dropout 0.0
   --hidden-dropout 0.0
   --accumulate-allreduce-grads-in-fp32
-  --no-gradient-accumulation-fusion
   --attention-softmax-in-fp32
   --attention-backend flash
   --moe-token-dispatcher-type "${MOE_TOKEN_DISPATCHER_TYPE:-alltoall}"
 )
+if [ "${NO_GRADIENT_ACCUMULATION_FUSION:-1}" = "1" ]; then
+  MISC_ARGS+=(--no-gradient-accumulation-fusion)
+fi
 if [ "${MEGATRON_DETERMINISTIC_MODE}" = "1" ]; then
   MISC_ARGS+=(--deterministic-mode)
 fi
@@ -891,7 +909,7 @@ setsid "${RAY_CLI[@]}" start --head --block \
 RAY_HEAD_PID=$!
 STARTED_RAY=1
 for _ in $(seq 1 120); do
-  if timeout 2s "${RAY_CLI[@]}" status --address="${MASTER_ADDR}:${RAY_GCS_PORT}" >/dev/null 2>&1; then
+  if timeout 10s "${RAY_CLI[@]}" status --address="${MASTER_ADDR}:${RAY_GCS_PORT}" >/dev/null 2>&1; then
     break
   fi
   if ! kill -0 "${RAY_HEAD_PID}" 2>/dev/null; then
@@ -900,7 +918,7 @@ for _ in $(seq 1 120); do
   fi
   sleep 1
 done
-if ! timeout 5s "${RAY_CLI[@]}" status --address="${MASTER_ADDR}:${RAY_GCS_PORT}" >/dev/null 2>&1; then
+if ! timeout 30s "${RAY_CLI[@]}" status --address="${MASTER_ADDR}:${RAY_GCS_PORT}" >/dev/null 2>&1; then
   echo "Scoped Ray head did not become ready; see ${RAY_HEAD_LOG}" >&2
   exit 1
 fi
@@ -949,6 +967,7 @@ RUNTIME_ENV_JSON="$(python3 -c 'import json, os; keys = [
 "OPENCLAW_TRAJECTORY_MAX_TOKENS", "OPENCLAW_MAX_RESPONSE_TOKENS",
 "OPENCLAW_MAX_AGENT_STEPS", "OPENCLAW_MAX_COMPACTION_EVENTS",
 "OPENCLAW_TOKEN_LEDGER_MODE",
+"OPENCLAW_ASSEMBLE_OFFICIAL_SPLICE", "OPENCLAW_GATEWAY_CONFIG",
 "OPENCLAW_TRAIN_MAX_TURNS", "OPENCLAW_TRAIN_SCHEDULING",
 "OPENCLAW_EVAL_MAX_TURNS", "OPENCLAW_TRAIN_NUM_WORKERS", "OPENCLAW_EVAL_NUM_WORKERS",
 "OPENCLAW_EVAL_N_SAMPLES", "OPENCLAW_EVAL_SAVE_WORKSPACES",

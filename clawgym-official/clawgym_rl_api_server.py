@@ -1712,6 +1712,7 @@ class ClawGymRLAPIServer:
             segment_agent_steps: list[int] = []
             prompt_text = ""
             response_text = ""
+            last_response_text: str | None = None
 
             def prepare_dense_opsd(sample: Sample) -> None:
                 owner_args = getattr(owner, "args", None)
@@ -1796,6 +1797,92 @@ class ClawGymRLAPIServer:
                             "current_prompt_tokens": len(prompt_ids),
                             "split_performed": False,
                             "split_reason": None,
+                            "segment_index": segment_index,
+                            "compaction_detected": session_compacted_at_step,
+                            "tool_result_pruning_detected": (
+                                tool_results_pruned_at_step > 0
+                            ),
+                            "tool_result_truncation_detected": (
+                                tool_results_truncated_at_step > 0
+                            ),
+                        }
+                    )
+                elif os.environ.get("OPENCLAW_ASSEMBLE_OFFICIAL_SPLICE", "0") == "1":
+                    # Public ClawGym assembly: keep the old suffix and append the
+                    # new prompt from the first mismatched token. Flush only when
+                    # the previous assistant text is gone, or the window is full.
+                    current_prompt = step_data.get("prompt_text") or ""
+                    context_changed = not (
+                        last_response_text
+                        and last_response_text.strip()
+                        and last_response_text.strip() in current_prompt
+                    )
+                    max_tokens = int(
+                        os.environ.get("OPENCLAW_TRAJECTORY_MAX_TOKENS", "65536")
+                    )
+                    exceeds_limit = len(all_tokens) + len(response_ids) > max_tokens
+                    previous_segment_tokens = len(all_tokens)
+                    shared_prefix_tokens = _shared_prefix_length(all_tokens, prompt_ids)
+                    split_performed = context_changed or exceeds_limit
+                    if context_changed:
+                        context_transition = "official_context_changed"
+                        split_reason = "official_context_changed"
+                    elif exceeds_limit:
+                        context_transition = "trajectory_limit"
+                        split_reason = "trajectory_limit"
+                    else:
+                        context_transition = "official_splice"
+                        split_reason = None
+                    if split_performed:
+                        if all_loss_mask:
+                            sample = Sample()
+                            sample.prompt = prompt_text
+                            sample.response = response_text
+                            sample.tokens = list(all_tokens)
+                            sample.response_length = len(all_loss_mask)
+                            sample.loss_mask = list(all_loss_mask)
+                            sample.rollout_log_probs = list(all_logprobs)
+                            sample.status = (
+                                Sample.Status.TRUNCATED
+                                if segment_hit_response_limit
+                                else Sample.Status.COMPLETED
+                            )
+                            sample.index = traj_index
+                            sample.group_index = group_index_override
+                            sample.reward = {"score": reward_value}
+                            sample.metadata = {
+                                **sample_metadata,
+                                "session_id": target_sid,
+                                "traj_index": traj_index,
+                                "group_index": group_index_override,
+                                "segment_index": segment_index,
+                            }
+                            prepare_dense_opsd(sample)
+                            samples_to_submit.append(sample)
+                        all_tokens = list(prompt_ids)
+                        all_loss_mask = []
+                        all_logprobs = []
+                        all_step_ids = []
+                        segment_agent_steps = []
+                        prompt_text = step_data["prompt_text"]
+                        response_text = ""
+                        segment_index += 1
+                        segment_hit_response_limit = False
+                    else:
+                        delta_ids = list(prompt_ids[shared_prefix_tokens:])
+                        if delta_ids:
+                            all_tokens.extend(delta_ids)
+                            all_loss_mask.extend([0] * len(delta_ids))
+                            all_logprobs.extend([0.0] * len(delta_ids))
+                            all_step_ids.extend([-1] * len(delta_ids))
+                    step_details[index].update(
+                        {
+                            "context_transition": context_transition,
+                            "shared_prefix_tokens": shared_prefix_tokens,
+                            "previous_segment_tokens": previous_segment_tokens,
+                            "current_prompt_tokens": len(prompt_ids),
+                            "split_performed": split_performed,
+                            "split_reason": split_reason,
                             "segment_index": segment_index,
                             "compaction_detected": session_compacted_at_step,
                             "tool_result_pruning_detected": (
@@ -1921,6 +2008,7 @@ class ClawGymRLAPIServer:
                 all_step_ids.extend([step_num] * len(response_ids))
                 segment_agent_steps.append(step_num)
                 response_text += step_data["response_text"]
+                last_response_text = step_data["response_text"]
                 step_details[index]["segment_tokens_after_response"] = len(all_tokens)
 
             # Flush the last trajectory
@@ -2741,6 +2829,17 @@ class ClawGymRLAPIServer:
         )
         raw_tool_call_count = _count_raw_qwen_tool_calls(raw_response_text)
         parsed_tool_call_count = len(tool_calls)
+        # Match the official ClawGym-Agents behaviour of relaying only the
+        # first tool call per assistant turn. Off by default; the single-tool
+        # eval queues set OPENCLAW_MAX_TOOL_CALLS_PER_TURN=1.
+        max_tool_calls_per_turn = int(
+            os.environ.get("OPENCLAW_MAX_TOOL_CALLS_PER_TURN", "0") or 0
+        )
+        if (
+            max_tool_calls_per_turn > 0
+            and len(tool_calls) > max_tool_calls_per_turn
+        ):
+            tool_calls = tool_calls[:max_tool_calls_per_turn]
         if not hasattr(self, "_tool_call_repeat_state"):
             self._tool_call_repeat_state = {}
         consecutive_identical_tool_call_turns = _advance_tool_call_repeat_streak(
