@@ -589,7 +589,7 @@ fi
 
 ROLLOUT_ARGS=(
   --disable-rollout-global-dataset
-  --rollout-function-path span_trace_rollout.generate_rollout_clawgym_rl
+  --rollout-function-path "${OPENCLAW_ROLLOUT_FN:-span_trace_rollout.generate_rollout_clawgym_rl}"
   --num-rollout "${NUM_ROLLOUT:-100}"
   --rollout-batch-size "${ROLLOUT_BATCH_SIZE:-8}"
   --n-samples-per-prompt "${N_SAMPLES_PER_PROMPT:-8}"
@@ -742,13 +742,13 @@ if [ "${SGLANG_ENABLE_CUDA_GRAPH}" = "0" ]; then
 fi
 
 CUSTOM_ARGS=(
-  --custom-generate-function-path span_trace_api.generate
-  --custom-rm-path span_trace_api.reward_func
+  --custom-generate-function-path "${OPENCLAW_GENERATE_FN:-span_trace_api.generate}"
+  --custom-rm-path "${OPENCLAW_RM_FN:-span_trace_api.reward_func}"
 )
 
 EVAL_ARGS=(
   --eval-interval "${EVAL_INTERVAL_VALUE}"
-  --eval-function-path span_trace_rollout.generate_rollout_clawgym_rl
+  --eval-function-path "${OPENCLAW_ROLLOUT_FN:-span_trace_rollout.generate_rollout_clawgym_rl}"
   --eval-temperature "${EVAL_TEMPERATURE:-0.7}"
   --eval-top-p "${EVAL_TOP_P:-1.0}"
   --eval-top-k "${EVAL_TOP_K:--1}"
@@ -968,6 +968,7 @@ RUNTIME_ENV_JSON="$(python3 -c 'import json, os; keys = [
 "OPENCLAW_MAX_AGENT_STEPS", "OPENCLAW_MAX_COMPACTION_EVENTS",
 "OPENCLAW_TOKEN_LEDGER_MODE",
 "OPENCLAW_ASSEMBLE_OFFICIAL_SPLICE", "OPENCLAW_GATEWAY_CONFIG",
+"OPENCLAW_MAX_TOOL_CALLS_PER_TURN",
 "OPENCLAW_TRAIN_MAX_TURNS", "OPENCLAW_TRAIN_SCHEDULING",
 "OPENCLAW_EVAL_MAX_TURNS", "OPENCLAW_TRAIN_NUM_WORKERS", "OPENCLAW_EVAL_NUM_WORKERS",
 "OPENCLAW_EVAL_N_SAMPLES", "OPENCLAW_EVAL_SAVE_WORKSPACES",

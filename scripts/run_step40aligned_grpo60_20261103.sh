@@ -46,7 +46,10 @@ export ROLLOUT_TEMPERATURE=0.7 ROLLOUT_TOP_P=1.0 ROLLOUT_TOP_K=-1
 export SGLANG_ENABLE_DETERMINISTIC_INFERENCE=0 MEGATRON_DETERMINISTIC_MODE=0
 export OPENCLAW_DETERMINISTIC_TOOL_CALL_IDS=0
 export SGLANG_SESSION_AFFINITY=0
-export NO_GRADIENT_ACCUMULATION_FUSION=0
+# Fusion on makes Transformer Engine read weight.main_grad during MoE grouped GEMM.
+# This 30B stack never attaches that attribute, so the first backward dies.
+# Previous 30B runs keep fusion off. The public 4B script is dense and does not hit this.
+export NO_GRADIENT_ACCUMULATION_FUSION=1
 
 export CALCULATE_PER_TOKEN_LOSS=1
 export USE_ROUTING_REPLAY=1 USE_ROLLOUT_ROUTING_REPLAY=1 USE_TIS=1

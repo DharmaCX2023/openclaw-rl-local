@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Watch the step40-aligned 60-step run. On death, record the cause and restart
-# once the save directory can resume. Stop if it dies twice within 30 minutes.
+# once the save directory can resume. Stop after two deaths with no new optimizer step.
 set -uo pipefail
 SCRIPT=/root/openclaw-rl-local/scripts/run_step40aligned_grpo60_20261103.sh
 BASE=/mnt/humf/openclaw-rl-checkpoints
@@ -11,7 +11,7 @@ WD_LOG="$BASE/${NAME}-watchdog.log"
 PY=/root/openclaw-rl-local/.venv-openclaw/bin/python
 LAST_MARK=""
 RESTARTS=0
-LAST_RESTART_AT=0
+LAST_GOOD_STEP=-1
 
 log() { echo "[$(date -u +%FT%TZ)] $*"; echo "[$(date -u +%FT%TZ)] $*" >> "$WD_LOG"; }
 
@@ -83,15 +83,15 @@ while true; do
     log "WATCHDOG_DONE step=${STEP}"
     exit 0
   fi
-  NOW="$(date +%s)"
   CAUSE="$(tail -n 80 "$DRIVER_LOG" 2>/dev/null | grep -E "Traceback|Error|Exception|Scoped Ray|CUDA out of memory|ActorDied|SAVE_CKPT must" | tail -n 5 | tr '\n' ' ' )"
   log "WATCHDOG_DEAD step=${STEP} perf=${PERF} cause=${CAUSE:-unknown}"
-  if [ $((NOW - LAST_RESTART_AT)) -lt 1800 ] && [ "$RESTARTS" -ge 2 ]; then
+  if [ "${STEP:--1}" -ge 40 ] 2>/dev/null && [ "${STEP}" != "${LAST_GOOD_STEP}" ]; then
+    RESTARTS=0
+    LAST_GOOD_STEP="${STEP}"
+  fi
+  if [ "$RESTARTS" -ge 2 ]; then
     log "WATCHDOG_GIVE_UP restarts=${RESTARTS} cause=${CAUSE:-unknown}"
     exit 1
-  fi
-  if [ $((NOW - LAST_RESTART_AT)) -ge 1800 ]; then
-    RESTARTS=0
   fi
   clean_orphans >> "$WD_LOG" 2>&1 || true
   stop_scoped_ray
@@ -103,7 +103,6 @@ while true; do
   fi
   nohup setsid bash "$SCRIPT" >> "$DRIVER_LOG" 2>&1 < /dev/null &
   RESTARTS=$((RESTARTS + 1))
-  LAST_RESTART_AT="$NOW"
   log "restart pid=$! count=${RESTARTS}"
   sleep 120
 done
